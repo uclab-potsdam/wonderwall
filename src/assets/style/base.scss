@@ -1,0 +1,33 @@
+@import "global";
+@import "typo";
+@import "themes";
+@import "colors";
+@import "variables";
+
+html {
+  font: var(--regular) var(--font-size)/1.25 "Inter", sans-serif;
+  box-sizing: border-box;
+  background: var(--background);
+  color: var(--text);
+  // overflow: hidden; // disabled for storybook
+
+  ::selection {
+    background: var(--selection);
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    font-weight: var(--bold);
+    font-size: var(--font-size-l);
+  }
+
+  h2 {
+    font-weight: var(--bold);
+    font-size: var(--font-size);
+  }
+}

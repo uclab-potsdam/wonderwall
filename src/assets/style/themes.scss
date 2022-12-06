@@ -1,0 +1,17 @@
+:root {
+  --background: rgb(var(--gray-11));
+  --text: rgb(var(--blue-gray-1));
+}
+
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//   }
+// }
+
+// .blur {
+//   background: rgb(var(--secondary));
+//   @supports ((-webkit-backdrop-filter:saturate(180%) blur(20px)) or (backdrop-filter:saturate(180%) blur(20px))) {
+//     background: rgba(var(--secondary), .5);
+//     backdrop-filter: blur(7px);
+//   }
+// }

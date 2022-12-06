@@ -1,0 +1,56 @@
+<script setup>
+import { useSyncStore } from "@/stores/sync";
+import { ref, onMounted } from "vue";
+
+const video = ref(null);
+const range = [37, 240];
+
+const syncStore = useSyncStore();
+
+onMounted(() => {
+  requestAnimationFrame(update);
+});
+
+function update() {
+  let currentTime = video.value.currentTime;
+  if (currentTime < range[0] || currentTime > range[1])
+    video.value.currentTime = currentTime = range[0];
+  syncStore.setTime(currentTime);
+  requestAnimationFrame(update);
+}
+// const videos = Array.from(document.querySelectorAll("video"));
+// const channel = new BroadcastChannel("sync");
+// let video = videos[0];
+
+// video.preload = "auto";
+
+// function timeUpdate() {
+//   const currentTime = video.currentTime;
+//   channel.postMessage({
+//     type: "timeUpdate",
+//     current: currentTime,
+//     total: video.duration,
+//     paused: video.paused,
+//   });
+//   requestAnimationFrame(timeUpdate);
+// }
+// requestAnimationFrame(timeUpdate);
+</script>
+
+<template>
+  <video id="tunnel" width="100%" loop autoplay muted ref="video" controls>
+    <source src="/baniwa.webm" type="video/webm" preload />
+  </video>
+</template>
+
+<style scoped lang="scss">
+video {
+  background: rgb(var(--gray-0));
+  position: absolute;
+  object-fit: contain;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: filter 0.4s, opacity 0.4s;
+}
+</style>
