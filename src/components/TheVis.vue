@@ -43,17 +43,26 @@ dataStore.connect();
       <g class="links">
         <g
           class="link"
-          v-for="link in forceStore.links"
-          :key="`${link.source}/${link.target}`"
+          v-for="(link, i) in forceStore.links"
+          :key="`${link.source.id}/${link.target.id}`"
         >
-          <line
-            stroke="black"
-            :x1="link.source.x"
-            :y1="link.source.y"
-            :x2="link.target.x"
-            :y2="link.target.y"
+          <path
+            stroke="white"
+            stroke-width="10"
+            :d="`M${link.source.x},${link.source.y}L${link.target.x},${link.target.y}`"
+            yid="`path-${link.source.id}-${link.target.id}`"
+            :id="`path-${i}`"
           />
-          <!-- <text>{{ node.label }}</text> -->
+          <text class="label">
+            <textPath
+              yhref="`#path-${link.source.id}-${link.target.id}`"
+              :href="`#path-${i}`"
+              :startOffset="`50%`"
+              dominant-baseline="middle"
+            >
+              {{ link.label.replaceAll("_", " ") }}
+            </textPath>
+          </text>
         </g>
       </g>
       <g class="nodes">
@@ -63,8 +72,13 @@ dataStore.connect();
           :key="node.id"
           :transform="`translate(${node.x} ${node.y})`"
         >
-          <circle r="10" :fill="node.active ? 'red' : 'grey'" />
-          <text>{{ node.label }}</text>
+          <!-- <circle r="10" :fill="node.active ? 'red' : 'grey'" />
+          <text>{{ node.label }}</text> -->
+          <foreignObject width="150" height="1">
+            <div class="label" :class="{ active: node.active }">
+              <mark>{{ node.label }}</mark>
+            </div>
+          </foreignObject>
         </g>
       </g>
     </g>
@@ -76,17 +90,43 @@ svg {
   position: absolute;
   width: 100%;
   height: 100%;
-}
-.entities {
-  display: flex;
-  flex-wrap: wrap;
-  .entity {
-    background: var(--text);
-    color: var(--background);
-    margin: var(--spacing);
-    padding: var(--spacing-s) var(--spacing);
-    font-size: var(--font-size-l);
-    font-weight: var(--bold);
+  background: black;
+
+  .links {
+    .link {
+      .label {
+        text-anchor: middle;
+        font-size: var(--font-size);
+        // fill: var(--edges);
+      }
+    }
+  }
+
+  .nodes {
+    .node {
+      foreignObject {
+        overflow: visible;
+      }
+      .label {
+        position: absolute;
+        color: rgb(var(--gray-0));
+        transform: translate(-50%, -50%);
+        font-size: var(--font-size-l);
+        text-align: center;
+        mark {
+          background-color: rgb(var(--gray-11));
+          outline: var(--spacing-xs) solid rgb(var(--gray-11));
+          // box-shadow: 5px 0 red;
+        }
+
+        &.active {
+          mark {
+            background-color: rgb(var(--yellow-7));
+            outline: var(--spacing-xs) solid rgb(var(--yellow-7));
+          }
+        }
+      }
+    }
   }
 }
 </style>
