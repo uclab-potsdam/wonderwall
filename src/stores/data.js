@@ -84,7 +84,6 @@ export const useDataStore = defineStore("data", () => {
       )
     );
 
-    console.log(unpack(schema.bindings));
     // console.log(
     //   await client.value.getDocument({
     //     as_list: true,
@@ -98,7 +97,6 @@ export const useDataStore = defineStore("data", () => {
   watch(
     activeIds,
     () => {
-      console.log("call");
       requestEntities(activeIds.value, degrees.value);
     },
     { deep: true }
@@ -108,7 +106,6 @@ export const useDataStore = defineStore("data", () => {
     const newIds = ids.filter(
       (id) => !entities.value.map((d) => d.id).includes(id)
     );
-    console.log(ids, newIds);
 
     let newEntities = [];
     const existingEntities = ids

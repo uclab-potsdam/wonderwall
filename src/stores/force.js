@@ -34,8 +34,6 @@ export const useForceStore = defineStore("force", () => {
       state.degrees
     );
 
-    console.log(activeEntities);
-
     const old = new Map(nodes.value.map((d) => [d.id, d]));
     // nodes = nodes.map(d => Object.assign(old.get(d.id) || {}, d));
     nodes.value = activeEntities.map((entity) => {
@@ -89,7 +87,6 @@ function findEntities(ids, entities, deg, matchedIds = []) {
           .filter((id) => !matchedIds.includes(id))
       ),
     ];
-    console.log(matchedIds, nextDegree);
     matchedEntities.push(
       ...findEntities(nextDegree, entities, deg - 1, matchedIds)
     );
