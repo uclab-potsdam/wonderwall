@@ -14,6 +14,7 @@ export const useDataStore = defineStore("data", () => {
   const ranges = ref([]);
   // const activeRanges = ref([]);
   const activeIds = ref([]);
+  const userIds = ref([]);
   const entities = ref([]);
   // const requestedEntities = ref([]);
   const branches = ref([]);
@@ -23,20 +24,30 @@ export const useDataStore = defineStore("data", () => {
   watch(
     () => syncStore.time,
     (time) => {
-      const current = ranges.value
-        .filter((range) => time >= range.in && time <= range.out)
-        .map((r) => r.id);
-
-      const toRemove = activeIds.value.filter((id) => !current.includes(id));
-      const toAdd = current.filter((id) => !activeIds.value.includes(id));
-
-      toRemove.forEach((id) => {
-        const index = activeIds.value.indexOf(id);
-        if (index != -1) activeIds.value.splice(index, 1);
-      });
-      activeIds.value.push(...toAdd);
+      update(time);
     }
   );
+
+  function update(time) {
+    const current = ranges.value
+      .filter((range) => time >= range.in && time <= range.out)
+      .map((r) => r.id);
+
+    const toRemove = activeIds.value.filter((id) => !current.includes(id));
+    const toAdd = current.filter((id) => !activeIds.value.includes(id));
+
+    toRemove.forEach((id) => {
+      const index = activeIds.value.indexOf(id);
+      if (index != -1) activeIds.value.splice(index, 1);
+    });
+    activeIds.value.push(...toAdd);
+
+    console.log(time, ranges.value, current, activeIds.value, toRemove, toAdd);
+  }
+
+  // update(-1);
+  // update(219);
+  // syncStore.setTime(210);
 
   const activeRanges = computed(() =>
     ranges.value.filter(
@@ -91,13 +102,17 @@ export const useDataStore = defineStore("data", () => {
     //   })
     // );
 
-    ranges.value = await fetch("/ranges.json").then((d) => d.json());
+    ranges.value = await fetch("/ranges-2.json").then((d) => d.json());
+    update(219);
   }
 
+  const mixedIds = computed(() => [...activeIds.value, ...userIds.value]);
+
   watch(
-    activeIds,
+    mixedIds,
     () => {
-      requestEntities(activeIds.value, degrees.value);
+      console.log(mixedIds.value);
+      requestEntities(mixedIds.value, degrees.value);
     },
     { deep: true }
   );
@@ -153,7 +168,7 @@ export const useDataStore = defineStore("data", () => {
           };
         });
 
-        const label = props.find((prop) => prop.id == null)?.label.en;
+        const label = props.find((prop) => prop.id == null)?.label?.en;
 
         const reservedKeys = ["label", "position", "rdf:type"];
         const selectedProps = props.filter(
@@ -179,6 +194,14 @@ export const useDataStore = defineStore("data", () => {
     }
   }
 
+  function select(node) {
+    userIds.value.push(node.id);
+    setTimeout(() => {
+      const index = userIds.value.indexOf(node.id);
+      if (index != -1) userIds.value.splice(index, 1);
+    }, 1000 * 15);
+  }
+
   return {
     client,
     ranges,
@@ -186,8 +209,11 @@ export const useDataStore = defineStore("data", () => {
     entities,
     activeEntities,
     activeIds,
+    mixedIds,
+    userIds,
     degrees,
     connect,
+    select,
   };
 });
 

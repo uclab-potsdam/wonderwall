@@ -1,0 +1,128 @@
+[
+  {
+    "label": "Campinarana",
+    "id": "_ea96ff2f7059f1374296c046eb738011c4d2311ee61b7136983a57f1e525f3da",
+    "in": 37.708333333333336,
+    "out": 44.5
+  },
+  {
+    "label": "forest",
+    "id": "_e7558134e2d061d5b99e5144cf31d710cbb668fb414746a37d0988bfd116eb8b",
+    "in": 44.5,
+    "out": 56.75
+  },
+  {
+    "label": "Collecting Clay",
+    "id": "_076084c3967126f59c23ef72aeb6bb245c0bd352a8bd3506f486475cee56ebe8",
+    "in": 56.75,
+    "out": 63.25
+  },
+  {
+    "label": "forest",
+    "id": "_e7558134e2d061d5b99e5144cf31d710cbb668fb414746a37d0988bfd116eb8b",
+    "in": 63.25,
+    "out": 70.58333333333333
+  },
+  {
+    "label": "Collecting Oomaphitako",
+    "id": "_83d5d824b9997d1fd4d0aa2f28ba75dc241f057a7864fa2487614cd76f258567",
+    "in": 70.58333333333333,
+    "out": 76.375
+  },
+  {
+    "label": "Oomaphitako Leaves",
+    "id": "_3835d15ca178d7c4b9f57ac1b544b2af5db3a86308378f210da0e2d11a620ee2",
+    "in": 76.375,
+    "out": 92.04166666666667
+  },
+  {
+    "label": "Kawa Bark",
+    "id": "_b5519b9326551e5c6a6894906bb5f87fc78fbea85d9295dfb0df294d2715a77a",
+    "in": 92.04166666666667,
+    "out": 101.625
+  },
+  {
+    "label": "Aturá",
+    "id": "_fdab2bcb1fed22425393f3817bb3edbc4e0589623b1f176887ff2fcb4d6b97c4",
+    "in": 101.625,
+    "out": 105.16666666666667
+  },
+  {
+    "label": "Kawa Bark",
+    "id": "_b5519b9326551e5c6a6894906bb5f87fc78fbea85d9295dfb0df294d2715a77a",
+    "in": 105.16666666666667,
+    "out": 107.875
+  },
+  {
+    "label": "forest",
+    "id": "_e7558134e2d061d5b99e5144cf31d710cbb668fb414746a37d0988bfd116eb8b",
+    "in": 107.875,
+    "out": 115.20833333333333
+  },
+  {
+    "label": "Collecting Clay",
+    "id": "_076084c3967126f59c23ef72aeb6bb245c0bd352a8bd3506f486475cee56ebe8",
+    "in": 115.20833333333333,
+    "out": 117.70833333333333
+  },
+  {
+    "label": "riverbed",
+    "id": "_94acdfcd1fa224c1866258b9aab435e2281f196f44ca56dc9a86f4737288e7c8",
+    "in": 117.70833333333333,
+    "out": 120.54166666666667
+  },
+  {
+    "label": "Aturá",
+    "id": "_fdab2bcb1fed22425393f3817bb3edbc4e0589623b1f176887ff2fcb4d6b97c4",
+    "in": 120.54166666666667,
+    "out": 124.66666666666667
+  },
+  {
+    "label": "Clay",
+    "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494",
+    "in": 124.66666666666667,
+    "out": 146.41666666666666
+  },
+  {
+    "label": "Anaconda (the clays owner)",
+    "id": "_95054e3e5904a6ef22f082059e955264e86aa491896fc10b1651490265c8f1d1",
+    "in": 146.41666666666666,
+    "out": 149.70833333333334
+  },
+  {
+    "label": "Clay",
+    "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494",
+    "in": 149.70833333333334,
+    "out": 176.45833333333334
+  },
+  {
+    "label": "Anaconda (the clays owner)",
+    "id": "_95054e3e5904a6ef22f082059e955264e86aa491896fc10b1651490265c8f1d1",
+    "in": 176.45833333333334,
+    "out": 191.91666666666666
+  },
+  {
+    "label": "Clay",
+    "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494",
+    "in": 191.91666666666666,
+    "out": 200.75
+  },
+  {
+    "label": "Aturá",
+    "id": "_fdab2bcb1fed22425393f3817bb3edbc4e0589623b1f176887ff2fcb4d6b97c4",
+    "in": 200.75,
+    "out": 215
+  },
+  {
+    "label": "carrying resources",
+    "id": "_32ac3497bfd650875650d8e9bd0956669dab5a6d500181172f2b167ba734dfbf",
+    "in": 215,
+    "out": 228.83333333333334
+  },
+  {
+    "label": "Village",
+    "id": "_819fe4cdd3fdc41ef42dd08ba01049b2d49456c6c3d9bb66e5c598bbe51f0263",
+    "in": 228.83333333333334,
+    "out": 669.0833333333334
+  }
+]
