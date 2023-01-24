@@ -15,10 +15,11 @@ const path = computed(() => {
 <template>
   <g class="link">
     <BaseInterpolate :props="{ path }" :delay="500" v-slot="value">
-      <path stroke-width="1" :d="value.path" :id="`path-${props.source.id}-${props.target.id}`" />
+      <path stroke-width="100" :d="value.path" class="broad" />
+      <path stroke-width="1" :d="value.path" class="fine" :id="`path-${props.source.id}-${props.target.id}`" />
       <text class="label">
-        <textPath :href="`#path-${props.source.id}-${props.target.id}`" :startOffset="`50%`" dominant-baseline="middle">
-          {{ props.label.replaceAll("_", " ") }}
+        <textPath :href="`#path-${props.source.id}-${props.target.id}`" :startOffset="`50%`" dominant-baseline="bottom">
+          <tspan dy="-4">{{ props.label.replaceAll("_", " ") }}</tspan>
         </textPath>
       </text>
     </BaseInterpolate>
@@ -27,6 +28,7 @@ const path = computed(() => {
 
 <style scoped lang="scss">
 .link {
+  mix-blend-mode: multiply;
   .label {
     text-anchor: middle;
     font-size: var(--font-size);
@@ -35,7 +37,11 @@ const path = computed(() => {
   }
 
   path {
-    stroke: rgb(var(--blue-gray-8));
+    stroke: rgb(var(--blue-gray-2));
+    &.broad {
+      stroke: rgb(var(--red-8));
+      stroke-linecap: round;
+    }
   }
 }
 </style>
