@@ -3,7 +3,7 @@ import { useSyncStore } from "@/stores/sync";
 import { ref, onMounted } from "vue";
 
 const video = ref(null);
-const range = [37, 240];
+const range = [66, 240];
 
 const syncStore = useSyncStore();
 
@@ -13,8 +13,7 @@ onMounted(() => {
 
 function update() {
   let currentTime = video.value.currentTime;
-  if (currentTime < range[0] || currentTime > range[1])
-    video.value.currentTime = currentTime = range[0];
+  if (currentTime < range[0] || currentTime > range[1]) video.value.currentTime = currentTime = range[0];
   syncStore.setTime(currentTime);
   requestAnimationFrame(update);
 }
@@ -38,7 +37,7 @@ function update() {
 </script>
 
 <template>
-  <video id="tunnel" width="100%" loop autoplay muted ref="video" controls>
+  <video id="tunnel" width="100%" loop x-autoplay muted ref="video" controls>
     <source src="/baniwa.webm" type="video/webm" preload />
   </video>
 </template>

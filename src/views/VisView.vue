@@ -7,7 +7,7 @@ import TheVis from "@/components/TheVis.vue";
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .vis {
   min-height: 100vh;
   /* display: flex; */

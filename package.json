@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@terminusdb/terminusdb-client": "^10.0.25",
+    "d3-ease": "^3.0.1",
     "d3-force": "^3.0.0",
+    "d3-interpolate": "^3.0.1",
+    "lodash.isequal": "^4.5.0",
     "pinia": "^2.0.26",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"

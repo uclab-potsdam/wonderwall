@@ -1,30 +1,18 @@
 <script setup>
 import { useDataStore } from "@/stores/data";
-import { useForceStore } from "@/stores/force";
 import { ref, computed } from "vue";
 
 import VisEdge from "@/components/VisEdge.vue";
+import VisNode from "@/components/VisNode.vue";
+import BaseInterpolate from "@/components/BaseInterpolate.vue";
 
 // const syncStore = useSyncStore();
 const dataStore = useDataStore();
-const forceStore = useForceStore();
-
-const scale = computed(() => {
-  // const min_x = Math.min(...forceStore.nodes.map((d) => d.x));
-  const max_x = Math.max(...forceStore.nodes.map((d) => Math.abs(d.x)));
-  // const min_y = Math.min(...forceStore.nodes.map((d) => d.y));
-  const max_y = Math.max(...forceStore.nodes.map((d) => Math.abs(d.y)));
-  const padding = 80;
-  const ratio_x = (innerWidth - padding * 2) / (max_x * 2);
-  const ratio_y = (innerHeight - padding * 2) / (max_y * 2);
-
-  const ratio = Math.min(ratio_x, ratio_y, 2.5);
-
-  return ratio;
-});
 
 const height = ref(innerHeight);
 const width = ref(innerWidth);
+
+const margin = [100, 200, 100, 200];
 
 window.onresize = () => {
   height.value = innerHeight;
@@ -32,39 +20,88 @@ window.onresize = () => {
 };
 
 dataStore.connect();
+
+const getRelatedEntities = (id, dir = "LEFT") => {
+  return dataStore.relations
+    .filter((r) => r[dir === "LEFT" ? "object" : "subject"] === dataStore.activeEntity?.id)
+    .map((relation, i, relations) => {
+      const x = dir === "LEFT" ? -width.value / 2 + margin[3] : width.value / 2 - margin[1];
+      const h = height.value - margin[0] - margin[2];
+      const count = relations.length;
+      const y = count === 1 ? 0 : (h / (count - 1)) * i - h / 2;
+      return {
+        entity: dataStore.entities.find((e) => e.id === relation[dir === "LEFT" ? "subject" : "object"]),
+        relation,
+        position: { x, y },
+      };
+    })
+    .filter((r) => r.entity != null);
+};
+
+const layout = computed(() => {
+  if (dataStore.activeEntity == null) return [];
+  const left = getRelatedEntities(dataStore.activeEntity?.id, "LEFT");
+  const right = getRelatedEntities(dataStore.activeEntity?.id, "RIGHT");
+
+  const center = { entity: dataStore.activeEntity, position: { x: 0, y: 0 } };
+
+  const edges = [
+    ...left.map((node) => ({
+      source: { ...node.position, id: node.entity.id },
+      target: { ...center.position, id: center.entity.id },
+      label: node.relation.predicate,
+    })),
+    ...right.map((node) => ({
+      source: { ...center.position, id: center.entity.id },
+      target: { ...node.position, id: node.entity.id },
+      label: node.relation.predicate,
+    })),
+  ];
+
+  return {
+    nodes: [...left, ...right, center],
+    edges,
+  };
+});
 </script>
 
 <template>
   <svg>
-    <g :transform="`translate(${width / 2} ${height / 2}) scale(${scale})`">
-      <g class="links">
-        <VisEdge
-          v-for="link in forceStore.links"
-          :key="`${link.source.id}/${link.target.id}`"
-          :source="link.source"
-          :target="link.target"
-          :label="link.label"
-        />
+    <g :transform="`translate(${width / 2} ${height / 2})`">
+      <g class="edges" v-if="dataStore.activeEntity">
+        <!-- <g class="edges" v-if="dataStore.activeEntity">
+          <BaseInterpolate
+            v-for="edge in layout.edges"
+            :key="`${edge.source.id}--${edge.label}--${edge.target.id}`"
+            :props="{ edge }"
+            v-slot="interpolated"
+          >
+            <VisEdge v-bind="interpolated.edge" />
+          </BaseInterpolate>
+        </g> -->
+        <TransitionGroup name="default">
+          <VisEdge
+            v-for="edge in layout.edges"
+            :key="`${edge.source.id}--${edge.label}--${edge.target.id}`"
+            v-bind="edge"
+          />
+        </TransitionGroup>
       </g>
-      <g class="nodes">
-        <g
-          class="node"
-          v-for="node in forceStore.nodes"
-          :key="node.id"
-          :transform="`translate(${node.x} ${node.y})`"
+      <!-- <g class="nodes" v-if="dataStore.activeEntity">
+        <BaseInterpolate
+          v-for="node in layout.nodes"
+          :key="node.entity.id"
+          :props="{ position: node.position }"
+          v-slot="interpolated"
         >
-          <!-- <circle r="10" :fill="node.active ? 'red' : 'grey'" />
-          <text>{{ node.label }}</text> -->
-          <foreignObject width="1" height="1">
-            <div
-              class="label"
-              :class="{ active: node.active }"
-              @click="dataStore.select(node)"
-            >
-              <mark>{{ node.label }}</mark>
-            </div>
-          </foreignObject>
-        </g>
+          <VisNode :entity="node.entity" v-bind="interpolated" />
+        </BaseInterpolate>
+      </g> -->
+
+      <g class="nodes" v-if="dataStore.activeEntity">
+        <TransitionGroup name="default">
+          <VisNode v-for="node in layout.nodes" :key="node.entity.id" :entity="node.entity" :position="node.position" />
+        </TransitionGroup>
       </g>
     </g>
   </svg>
@@ -129,6 +166,18 @@ svg {
         }
       }
     }
+  }
+
+  .default-enter-active {
+    transition: all 0.5s 1s ease;
+  }
+  .default-leave-active {
+    transition: all 0.5s ease;
+  }
+  .default-enter-from,
+  .default-leave-to {
+    opacity: 0;
+    filter: blur(15px);
   }
 }
 </style>

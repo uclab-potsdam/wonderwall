@@ -7,7 +7,7 @@ import TheVideo from "@/components/TheVideo.vue";
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .video {
   min-height: 100vh;
   /* display: flex; */

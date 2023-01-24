@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
+import BaseInterpolate from "@/components/BaseInterpolate.vue";
 
 const props = defineProps(["source", "target", "label"]);
 
@@ -13,20 +14,14 @@ const path = computed(() => {
 
 <template>
   <g class="link">
-    <path
-      stroke-width="1"
-      :d="path"
-      :id="`path-${props.source.id}-${props.target.id}`"
-    />
-    <text class="label">
-      <textPath
-        :href="`#path-${props.source.id}-${props.target.id}`"
-        :startOffset="`50%`"
-        dominant-baseline="middle"
-      >
-        {{ props.label.replaceAll("_", " ") }}
-      </textPath>
-    </text>
+    <BaseInterpolate :props="{ path }" :delay="500" v-slot="value">
+      <path stroke-width="1" :d="value.path" :id="`path-${props.source.id}-${props.target.id}`" />
+      <text class="label">
+        <textPath :href="`#path-${props.source.id}-${props.target.id}`" :startOffset="`50%`" dominant-baseline="middle">
+          {{ props.label.replaceAll("_", " ") }}
+        </textPath>
+      </text>
+    </BaseInterpolate>
   </g>
 </template>
 

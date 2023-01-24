@@ -3,7 +3,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 
 export const useSyncStore = defineStore("sync", () => {
   const channel = new BroadcastChannel("sync");
-  const time = ref(-1);
+  const time = ref(47.4);
   const playing = ref(true);
   // const doubleCount = computed(() => count.value * 2);
   function setTime(t) {

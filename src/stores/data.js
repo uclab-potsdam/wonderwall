@@ -4,7 +4,7 @@ import { WOQLClient, WOQL } from "@terminusdb/terminusdb-client";
 
 // eslint-disable-next-line vue/prefer-import-from-vue
 import { isObject, isArray } from "@vue/shared";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, watchEffect } from "vue";
 
 import { useSyncStore } from "@/stores/sync";
 
@@ -12,54 +12,50 @@ export const useDataStore = defineStore("data", () => {
   const syncStore = useSyncStore();
   const client = ref(null);
   const ranges = ref([]);
-  // const activeRanges = ref([]);
-  const activeIds = ref([]);
+  const active = ref("");
   const userIds = ref([]);
   const entities = ref([]);
+  const relations = ref([]);
   // const requestedEntities = ref([]);
   const branches = ref([]);
   const degrees = ref(1);
 
-  // detach updates from syncStore.time updates
-  watch(
-    () => syncStore.time,
-    (time) => {
-      update(time);
-    }
+  // const active = computed(() =>
+  //   ranges.value.find(
+  //     (range) => syncStore.time >= range.in && syncStore.time < range.out
+  //   )
+  // );
+
+  // decouple *syncStore.time* and *active*
+  // to prevent pemanent recomputing of computed values referring to *active*
+  watchEffect(() => {
+    const a = ranges.value.find(
+      (range) => syncStore.time >= range.in && syncStore.time < range.out
+    )?.id;
+    if (a !== active.value) active.value = a;
+  });
+
+  const activeEntity = computed(() =>
+    entities.value.find((e) => e.id === active.value)
   );
 
-  function update(time) {
-    const current = ranges.value
-      .filter((range) => time >= range.in && time <= range.out)
-      .map((r) => r.id);
+  // const hierarchy = computed(() => {
+  //   const entity = entities.value.find((e) => e.id === active.value.id);
+  //   return {
+  //     entity,
+  //     out: entity.props.map(({ id, label, value }) => ({
+  //       id,
+  //       label: label || id.replace(/_/g, " "),
+  //       entity: entities.value.find((e) => e.id === value),
+  //     })),
+  //     in: entities.value.filter(e => e.props.find(p => p.value === ))
+  //   };
+  // });
 
-    const toRemove = activeIds.value.filter((id) => !current.includes(id));
-    const toAdd = current.filter((id) => !activeIds.value.includes(id));
-
-    toRemove.forEach((id) => {
-      const index = activeIds.value.indexOf(id);
-      if (index != -1) activeIds.value.splice(index, 1);
-    });
-    activeIds.value.push(...toAdd);
-
-    console.log(time, ranges.value, current, activeIds.value, toRemove, toAdd);
-  }
-
-  // update(-1);
-  // update(219);
-  // syncStore.setTime(210);
-
-  const activeRanges = computed(() =>
-    ranges.value.filter(
-      (range) => syncStore.time >= range.in && syncStore.time <= range.out
-    )
-  );
-
-  const activeEntities = computed(() =>
-    activeRanges.value
-      .map((r) => entities.value.find((e) => e["@id"] === r.id))
-      .filter((d) => d != null)
-  );
+  watch(active, () => {
+    if (active.value == null) return;
+    requestEntitiesAndRelations([active.value], degrees.value);
+  });
 
   async function connect() {
     const server = import.meta.env.VITE_SERVER;
@@ -76,9 +72,10 @@ export const useDataStore = defineStore("data", () => {
     //   console.error(error);
     // }
 
-    branches.value = Object.entries(await client.value.getBranches()).map(
-      (d) => d[1]
-    );
+    const hideBranches = ["canvas-pottery-copy"];
+    branches.value = Object.entries(await client.value.getBranches())
+      .map((d) => d[1])
+      .filter((b) => !hideBranches.includes(b.name));
     const schema = await client.value.query(
       WOQL.or(
         ...branches.value.map(
@@ -95,102 +92,110 @@ export const useDataStore = defineStore("data", () => {
       )
     );
 
-    // console.log(
-    //   await client.value.getDocument({
-    //     as_list: true,
-    //     id: "@base:@bla",
-    //   })
-    // );
-
     ranges.value = await fetch("/ranges-2.json").then((d) => d.json());
-    update(219);
   }
 
-  const mixedIds = computed(() => [...activeIds.value, ...userIds.value]);
-
-  watch(
-    mixedIds,
-    () => {
-      console.log(mixedIds.value);
-      requestEntities(mixedIds.value, degrees.value);
-    },
-    { deep: true }
-  );
-
-  async function requestEntities(ids, deg) {
+  async function requestEntitiesAndRelations(ids, deg) {
     const newIds = ids.filter(
       (id) => !entities.value.map((d) => d.id).includes(id)
     );
 
-    let newEntities = [];
-    const existingEntities = ids
-      .map((id) => entities.value.find((d) => d.id === id))
-      .filter((d) => d != null);
-
-    if (newIds.length > 0) {
-      const response = await client.value.query(
-        WOQL.select("id", "props")
-          .group_by("v:id", ["ref", "sub", "pre", "obj", "label"], "v:props")
-          .or(
-            ...newIds.map((id) =>
-              WOQL.member("v:id", [id]).or(
-                ...branches.value.map((branch) =>
-                  WOQL.using(`branch/${branch.name}`)
-                    // .select("v:ref", "v:entity", "v:subject", "v:prop")
-                    .member("v:ref", [`branch/${branch.name}`])
-                    // .read_document(id, "v:entity")
-                    .or(
-                      WOQL.select("v:label")
-                        .triple("v:id", "label", "v:label_id")
-                        .read_document("v:label_id", "v:label"),
-                      WOQL.triple("v:sub", "v:pre", "v:id"),
-                      WOQL.triple("v:id", "v:pre", "v:obj")
+    const response =
+      newIds.length === 0
+        ? { bindings: [] }
+        : await client.value.query(
+            WOQL.select("id", "props")
+              .group_by(
+                "v:id",
+                ["ref", "sub", "pre", "obj", "label"],
+                "v:props"
+              )
+              .or(
+                ...newIds.map((id) =>
+                  WOQL.member("v:id", [id]).or(
+                    ...branches.value.map((branch) =>
+                      WOQL.using(`branch/${branch.name}`)
+                        .member("v:ref", [`branch/${branch.name}`])
+                        .or(
+                          WOQL.select("v:label")
+                            .triple("v:id", "label", "v:label_id")
+                            .read_document("v:label_id", "v:label"),
+                          WOQL.triple("v:sub", "v:pre", "v:id"),
+                          WOQL.triple("v:id", "v:pre", "v:obj")
+                        )
                     )
+                  )
                 )
               )
-            )
-          )
-      );
+          );
 
-      newEntities = unpack(response.bindings).map((bindings) => {
-        const props = bindings.props.map((p) => {
-          const ref = p[0];
-          const sub = p[1];
-          const pre = p[2];
-          const obj = p[3];
-          const label = p[4];
-          return {
-            ref,
-            id: pre?.replace(/^@schema:/, "") || null,
-            inverse: sub !== null,
-            value: sub || obj,
-            label,
-          };
-        });
+    // console.log(response);
 
-        const label = props.find((prop) => prop.id == null)?.label?.en;
-
-        const reservedKeys = ["label", "position", "rdf:type"];
-        const selectedProps = props.filter(
-          (prop) => prop.id != null && !reservedKeys.includes(prop.id)
-        );
-
-        return { id: bindings.id, label, props: selectedProps };
-      });
-    }
-
-    // const newEntities = ids.map((id) => {
-    //   const entity = bindings.filter((b) => b.id === id).map((d) => d.entity);
-    //   // console.log(entity);
-    //   return entity.reduce((a, b) => ({ ...a, ...b }));
-    // });
+    const unpacked = unpack(response.bindings);
+    const newEntities = unpacked.map((bindings) => {
+      const label = bindings.props.find((p) => p[4] != null);
+      const entityType = bindings.props.find((p) => p[2] === "rdf:type");
+      // if (label == null) return null;
+      return {
+        id: bindings.id,
+        label: label[4],
+        type: entityType[3].replace(/@schema:/, ""),
+      };
+    });
 
     entities.value.push(...newEntities);
+
+    const newRelations = unpacked
+      .map((bindings) => {
+        // const reservedKeys = ["label", "position", "rdf:type"];
+        const reservedKeys = ["@schema:label", "@schema:position", "rdf:type"];
+        return bindings.props
+          .filter((p) => p[2] != null && !reservedKeys.includes(p[2]))
+          .map((p) => {
+            return {
+              subject: p[1] || bindings.id,
+              predicate: p[2].replace(/@schema:/, ""),
+              object: p[3] || bindings.id,
+              branch: p[0],
+            };
+          });
+      })
+      .flat()
+      .filter(
+        (r1) =>
+          relations.value.find(
+            (r2) =>
+              r1.subject === r2.subject &&
+              r1.predicate === r2.predicate &&
+              r1.object === r2.object &&
+              r1.branch === r2.branch
+          ) == null
+      );
+
+    relations.value.push(...newRelations);
+
     if (deg > 0) {
-      const nextDegree = [...existingEntities, ...newEntities]
-        .map((entity) => entity.props.map((prop) => prop.value))
-        .flat(2);
-      requestEntities(nextDegree, deg - 1);
+      const nextDegree = [
+        ...new Set(
+          ids
+            .map((id) =>
+              relations.value
+                .filter((r) => r.subject === id || r.object === id)
+                .map((r) => [r.subject, r.object])
+            )
+            .flat(2)
+        ),
+      ];
+
+      requestEntitiesAndRelations(nextDegree, deg - 1);
+      // const existingEntities = ids
+      // .map((id) => entities.value.find((d) => d.id === id))
+      // .filter((d) => d != null);
+      //   const nextDegree = [...existingEntities, ...newEntities]
+      //     .map((entity) => entity.props.map((prop) => prop.value))
+      //     .flat(2);
+      //   console.log(nextDegree);
+      //   requestEntitiesAndRelations(nextDegree, deg - 1);
     }
   }
 
@@ -203,17 +208,19 @@ export const useDataStore = defineStore("data", () => {
   }
 
   return {
+    branches,
     client,
     ranges,
-    activeRanges,
+    active,
+    activeEntity,
     entities,
-    activeEntities,
-    activeIds,
-    mixedIds,
     userIds,
     degrees,
+    relations,
+    // hierarchy,
     connect,
     select,
+    requestEntitiesAndRelations,
   };
 });
 
