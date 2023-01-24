@@ -13,6 +13,9 @@ const height = ref(innerHeight);
 const width = ref(innerWidth);
 
 const margin = [100, 200, 100, 200];
+const degRange = 120;
+const degOffsetRight = (180 - degRange) / 2 - 90;
+const degOffsetLeft = degOffsetRight + 180;
 
 window.onresize = () => {
   height.value = innerHeight;
@@ -25,10 +28,15 @@ const getRelatedEntities = (id, dir = "LEFT") => {
   return dataStore.relations
     .filter((r) => r[dir === "LEFT" ? "object" : "subject"] === dataStore.activeEntity?.id)
     .map((relation, i, relations) => {
-      const x = dir === "LEFT" ? -width.value / 2 + margin[3] : width.value / 2 - margin[1];
-      const h = height.value - margin[0] - margin[2];
       const count = relations.length;
-      const y = count === 1 ? 0 : (h / (count - 1)) * i - h / 2;
+      const fraction = count === 1 ? 0.5 : (1 / (count - 1)) * i;
+      const deg = fraction * degRange + (dir === "LEFT" ? degOffsetLeft : degOffsetRight);
+      const r = (height.value - margin[0] - margin[2]) / 2;
+
+      // const deg =
+
+      const x = r * Math.cos((Math.PI * 2 * deg) / 360);
+      const y = r * Math.sin((Math.PI * 2 * deg) / 360);
       return {
         entity: dataStore.entities.find((e) => e.id === relation[dir === "LEFT" ? "subject" : "object"]),
         relation,
