@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "host": "vite --host",
+    "build": "vite build --minify false",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
@@ -13,7 +14,11 @@
     "d3-ease": "^3.0.1",
     "d3-force": "^3.0.0",
     "d3-interpolate": "^3.0.1",
+    "lodash.groupby": "^4.6.0",
     "lodash.isequal": "^4.5.0",
+    "lodash.partition": "^4.6.0",
+    "lodash.uniqby": "^4.7.0",
+    "lodash.uniqwith": "^4.5.0",
     "pinia": "^2.0.26",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"

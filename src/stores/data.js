@@ -1,5 +1,5 @@
 // // import { ref, computed } from "vue";
-import { defineStore, acceptHMRUpdate } from "pinia";
+import { defineStore, acceptHMRUpdate, storeToRefs } from "pinia";
 import { WOQLClient, WOQL } from "@terminusdb/terminusdb-client";
 
 // eslint-disable-next-line vue/prefer-import-from-vue
@@ -7,6 +7,9 @@ import { isObject, isArray } from "@vue/shared";
 import { ref, computed, watch, watchEffect } from "vue";
 
 import { useSyncStore } from "@/stores/sync";
+
+import uniqWith from "lodash.uniqwith";
+import isEqual from "lodash.isequal";
 
 export const useDataStore = defineStore("data", () => {
   const syncStore = useSyncStore();
@@ -19,6 +22,10 @@ export const useDataStore = defineStore("data", () => {
   // const requestedEntities = ref([]);
   const branches = ref([]);
   const degrees = ref(1);
+  const userActive = ref(null);
+  const history = ref([]);
+
+  // const { time } = storeToRefs(syncStore);
 
   // const active = computed(() =>
   //   ranges.value.find(
@@ -29,14 +36,22 @@ export const useDataStore = defineStore("data", () => {
   // decouple *syncStore.time* and *active*
   // to prevent pemanent recomputing of computed values referring to *active*
   watchEffect(() => {
-    const a = ranges.value.find(
-      (range) => syncStore.time >= range.in && syncStore.time < range.out
-    )?.id;
+    const a = ranges.value.findLast((range) => syncStore.time >= range.in)?.id;
     if (a !== active.value) active.value = a;
+    // console.log(time);
+    extendHistory();
   });
+  // watch(time, (newTime, oldTime) => {
+  //   // console.log(newTime, time);
+  //   const a = ranges.value.find((range) => newTime >= range.in && newTime < range.out)?.id;
+  //   if (a !== active.value) active.value = a;
+  //   // console.log(oldSync.time, sync.time);
+  //   if (oldTime < newTime) extendHistory();
+  // });
 
-  const activeEntity = computed(() =>
-    entities.value.find((e) => e.id === active.value)
+  const activeEntity = computed(() => entities.value.find((e) => e.id === (userActive.value || active.value)));
+  const historyPath = computed(() =>
+    history.value.filter((id, i) => i < history.value.length - 2).map((id, i) => [id.id, history.value[i + 1].id])
   );
 
   // const hierarchy = computed(() => {
@@ -56,6 +71,29 @@ export const useDataStore = defineStore("data", () => {
     if (active.value == null) return;
     requestEntitiesAndRelations([active.value], degrees.value);
   });
+
+  // watch(history, (history) => {
+  //   console.log('history change')
+  //   if (history.length < 5) return;
+
+  //   // requestEntitiesAndRelations([active.value], degrees.value);
+  // });
+
+  function extendHistory() {
+    const id = userActive.value || active.value;
+    if (history.value[0]?.id !== id) {
+      history.value.unshift({
+        id,
+        x: (Math.random() * 10 + 10) * (Math.random() < 0.5 ? -1 : 1),
+        y: (Math.random() * 10 + 10) * (Math.random() < 0.5 ? -1 : 1),
+        gen: performance.now(),
+      });
+      if (history.value.length > 5) {
+        history.value = history.value.slice(0, 5);
+      }
+      console.log("extending history", { ...history.value });
+    }
+  }
 
   async function connect() {
     const server = import.meta.env.VITE_SERVER;
@@ -96,20 +134,14 @@ export const useDataStore = defineStore("data", () => {
   }
 
   async function requestEntitiesAndRelations(ids, deg) {
-    const newIds = ids.filter(
-      (id) => !entities.value.map((d) => d.id).includes(id)
-    );
+    const newIds = ids.filter((id) => !entities.value.map((d) => d.id).includes(id));
 
     const response =
       newIds.length === 0
         ? { bindings: [] }
         : await client.value.query(
             WOQL.select("id", "props")
-              .group_by(
-                "v:id",
-                ["ref", "sub", "pre", "obj", "label"],
-                "v:props"
-              )
+              .group_by("v:id", ["ref", "sub", "pre", "obj", "label"], "v:props")
               .or(
                 ...newIds.map((id) =>
                   WOQL.member("v:id", [id]).or(
@@ -172,16 +204,16 @@ export const useDataStore = defineStore("data", () => {
           ) == null
       );
 
-    relations.value.push(...newRelations);
+    // relations.value.push(...newRelations)
+    relations.value = uniqWith([...relations.value, ...newRelations], isEqual);
+    // uniqBy([...relations, ...newRelations], (node) => node.entity.id),
 
     if (deg > 0) {
       const nextDegree = [
         ...new Set(
           ids
             .map((id) =>
-              relations.value
-                .filter((r) => r.subject === id || r.object === id)
-                .map((r) => [r.subject, r.object])
+              relations.value.filter((r) => r.subject === id || r.object === id).map((r) => [r.subject, r.object])
             )
             .flat(2)
         ),
@@ -199,12 +231,21 @@ export const useDataStore = defineStore("data", () => {
     }
   }
 
-  function select(node) {
-    userIds.value.push(node.id);
-    setTimeout(() => {
-      const index = userIds.value.indexOf(node.id);
-      if (index != -1) userIds.value.splice(index, 1);
-    }, 1000 * 15);
+  let userInterectedTimeout = null;
+  function select(id) {
+    clearTimeout(userInterectedTimeout);
+    userActive.value = id;
+    extendHistory();
+    requestEntitiesAndRelations([userActive.value], degrees.value);
+    userInterectedTimeout = setTimeout(() => {
+      userActive.value = null;
+      extendHistory();
+    }, 15000);
+    // userIds.value.push(node.id);
+    // setTimeout(() => {
+    //   const index = userIds.value.indexOf(node.id);
+    //   if (index != -1) userIds.value.splice(index, 1);
+    // }, 1000 * 15);
   }
 
   return {
@@ -221,6 +262,8 @@ export const useDataStore = defineStore("data", () => {
     connect,
     select,
     requestEntitiesAndRelations,
+    historyPath,
+    history,
   };
 });
 
@@ -234,10 +277,7 @@ function unpack(obj) {
   }
   return Object.fromEntries(
     Object.entries(obj).map((o) => {
-      return [
-        o[0],
-        isObject(o[1]) && o[1]["@value"] !== undefined ? o[1]["@value"] : o[1],
-      ];
+      return [o[0], isObject(o[1]) && o[1]["@value"] !== undefined ? o[1]["@value"] : o[1]];
     })
   );
 }

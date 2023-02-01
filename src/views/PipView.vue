@@ -18,9 +18,9 @@ import TheVideo from "@/components/TheVideo.vue";
   /* align-items: center; */
 
   .video {
-    --width: 300px;
+    --width: 450px;
     --ratio: calc(16 / 9);
-    opacity: 0.5;
+    // opacity: 0.5;
     position: absolute;
     z-index: 1;
     top: var(--spacing);

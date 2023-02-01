@@ -55,7 +55,7 @@ export default function (url) {
   console.log(url);
   const data = ref(url);
   let start = null;
-  const duration = 500;
+  const duration = 1000;
 
   function doFetch() {
     // reset state before fetching..
