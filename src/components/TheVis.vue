@@ -53,11 +53,6 @@ const getSecondaryEntities = (primaryNode) => {
     [node.isSubject ? "target" : "source"]: { ...primaryNode.position, id: primaryNode.entity.id },
     label: node.relation.predicate,
     degree: 2,
-    // history: dataStore.historyPath.findIndex(
-    //   (path) =>
-    //     (path[0] === node.entity.id && path[1] === primaryNode.entity.id) ||
-    //     (path[1] === node.entity.id && path[0] === primaryNode.entity.id)
-    // ),
   }));
 
   return { nodes: [...positionEntities(subjects, true), ...positionEntities(objects, false)], edges };
@@ -169,11 +164,6 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
         [node.isSubject ? "target" : "source"]: { ...node.secondaryNode.position, id: node.secondaryNode.entity.id },
         label: node.relation.predicate,
         degree: 3,
-        // history: dataStore.historyPath.findIndex(
-        //   (path) =>
-        //     (path[0] === originalNode.entity.id && path[1] === node.secondaryNode.entity.id) ||
-        //     (path[1] === originalNode.entity.id && path[0] === node.secondaryNode.entity.id)
-        // ),
       };
     }),
     ...placableNodes.map((node) => ({
@@ -181,11 +171,6 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
       [node.isSubject ? "target" : "source"]: { ...node.secondaryNode.position, id: node.secondaryNode.entity.id },
       label: node.relation.predicate,
       degree: 3,
-      // history: dataStore.historyPath.findIndex(
-      //   (path) =>
-      //     (path[0] === node.entity.id && path[1] === node.secondaryNode.entity.id) ||
-      //     (path[1] === node.entity.id && path[0] === node.secondaryNode.entity.id)
-      // ),
     })),
     ...disputedNodes
       .map((node) => {
@@ -197,11 +182,6 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
           },
           label: subnode.relation.predicate,
           degree: 3,
-          // history: dataStore.historyPath.findIndex(
-          //   (path) =>
-          //     (path[0] === node.entity.id && path[1] === subnode.secondaryNode.entity.id) ||
-          //     (path[1] === node.entity.id && path[0] === subnode.secondaryNode.entity.id)
-          // ),
         }));
       })
       .flat(),
@@ -209,29 +189,29 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
   return { nodes: [...placableNodes, ...disputedNodes], edges };
 };
 
-function drawHistory(nodes) {
-  const historyNodes = dataStore.history.map((item) => {
-    const node = nodes.find((node) => node.entity.id === item.id);
-    return {
-      id: node?.entity.id,
-      x: item.x + node?.position.x,
-      y: item.y + node?.position.y,
-      gen: item.gen,
-    };
-  });
+// function drawHistory(nodes) {
+//   const historyNodes = dataStore.history.map((item) => {
+//     const node = nodes.find((node) => node.entity.id === item.id);
+//     return {
+//       id: node?.entity.id,
+//       x: item.x + node?.position.x,
+//       y: item.y + node?.position.y,
+//       gen: item.gen,
+//     };
+//   });
 
-  const historyEdges = historyNodes
-    .filter((node) => node.id != null)
-    .map((node, i, nodes) => ({ source: node, target: nodes[i + 1], history: true }))
-    .filter((node, i, nodes) => i < nodes.length - 1);
+//   const historyEdges = historyNodes
+//     .filter((node) => node.id != null)
+//     .map((node, i, nodes) => ({ source: node, target: nodes[i + 1], history: true }))
+//     .filter((node, i, nodes) => i < nodes.length - 1);
 
-  console.log("draw history", historyNodes, historyEdges);
-  return historyEdges;
+//   console.log("draw history", historyNodes, historyEdges);
+//   return historyEdges;
 
-  // { ...originalNode.position, id: originalNode.entity.id },
-  // console.log(historyNodes);
-  // return historyNodes;
-}
+//   // { ...originalNode.position, id: originalNode.entity.id },
+//   // console.log(historyNodes);
+//   // return historyNodes;
+// }
 
 const layout = computed(() => {
   if (dataStore.activeEntity == null) return [];
@@ -252,12 +232,12 @@ const layout = computed(() => {
 
   const nodes = uniqBy([...tertiary.nodes, ...secondary.nodes, primaryNode], (node) => node.entity.id);
 
-  const history = drawHistory(nodes);
+  // const history = drawHistory(nodes);
 
   return {
     nodes: nodes,
     edges: [...tertiary.edges, ...secondary.edges],
-    history,
+    // history,
   };
 });
 
@@ -290,7 +270,7 @@ function enterFullscreen() {
           />
         </TransitionGroup>
       </g>
-      <g class="history-path">
+      <!-- <g class="history-path">
         <TransitionGroup name="default">
           <VisEdge
             v-for="edge in layout.history"
@@ -298,7 +278,7 @@ function enterFullscreen() {
             v-bind="edge"
           />
         </TransitionGroup>
-      </g>
+      </g> -->
       <!-- <g class="nodes" v-if="dataStore.activeEntity">
         <BaseInterpolate
           v-for="node in layout.nodes"

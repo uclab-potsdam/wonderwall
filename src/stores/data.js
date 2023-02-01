@@ -82,16 +82,10 @@ export const useDataStore = defineStore("data", () => {
   function extendHistory() {
     const id = userActive.value || active.value;
     if (history.value[0]?.id !== id) {
-      history.value.unshift({
-        id,
-        x: (Math.random() * 10 + 10) * (Math.random() < 0.5 ? -1 : 1),
-        y: (Math.random() * 10 + 10) * (Math.random() < 0.5 ? -1 : 1),
-        gen: performance.now(),
-      });
-      if (history.value.length > 5) {
-        history.value = history.value.slice(0, 5);
+      history.value.unshift([id]);
+      if (history.value.length > 2) {
+        history.value = history.value.slice(0, 2);
       }
-      console.log("extending history", { ...history.value });
     }
   }
 
