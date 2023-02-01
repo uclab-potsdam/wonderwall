@@ -1,5 +1,5 @@
 // // import { ref, computed } from "vue";
-import { defineStore, acceptHMRUpdate, storeToRefs } from "pinia";
+import { defineStore, acceptHMRUpdate } from "pinia";
 import { WOQLClient, WOQL } from "@terminusdb/terminusdb-client";
 
 // eslint-disable-next-line vue/prefer-import-from-vue
@@ -19,11 +19,12 @@ export const useDataStore = defineStore("data", () => {
   const userIds = ref([]);
   const entities = ref([]);
   const relations = ref([]);
-  // const requestedEntities = ref([]);
   const branches = ref([]);
-  const degrees = ref(1);
+  const degrees = ref(2);
   const userActive = ref(null);
   const history = ref([]);
+  const preloadBuffer = ref(3);
+  const requesting = ref([]);
 
   // const { time } = storeToRefs(syncStore);
 
@@ -36,8 +37,16 @@ export const useDataStore = defineStore("data", () => {
   // decouple *syncStore.time* and *active*
   // to prevent pemanent recomputing of computed values referring to *active*
   watchEffect(() => {
-    const a = ranges.value.findLast((range) => syncStore.time >= range.in)?.id;
-    if (a !== active.value) active.value = a;
+    const index = ranges.value.findLastIndex((range) => syncStore.time >= range.in);
+    const id = ranges.value[index]?.id;
+    if (id !== active.value) {
+      active.value = id;
+      const preload = ranges.value.slice(index, index + preloadBuffer.value).map((range) => range.id);
+      requestEntitiesAndRelations(preload, degrees.value);
+      // console.log("preload", nextPreload);
+      //  = nextPreload;
+    }
+
     // console.log(time);
     extendHistory();
   });
@@ -128,8 +137,8 @@ export const useDataStore = defineStore("data", () => {
   }
 
   async function requestEntitiesAndRelations(ids, deg) {
-    const newIds = ids.filter((id) => !entities.value.map((d) => d.id).includes(id));
-
+    const newIds = ids.filter((id) => ![...entities.value.map((d) => d.id), ...requesting.value].includes(id));
+    requesting.value = [...requesting.value, ...newIds];
     const response =
       newIds.length === 0
         ? { bindings: [] }
@@ -156,7 +165,7 @@ export const useDataStore = defineStore("data", () => {
           );
 
     // console.log(response);
-
+    requesting.value = requesting.value.filter((id) => !newIds.includes(id));
     const unpacked = unpack(response.bindings);
     const newEntities = unpacked.map((bindings) => {
       const label = bindings.props.find((p) => p[4] != null);
