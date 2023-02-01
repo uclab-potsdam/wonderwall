@@ -8,6 +8,9 @@ import VisEdge from "@/components/VisEdge.vue";
 import VisNode from "@/components/VisNode.vue";
 import BaseInterpolate from "@/components/BaseInterpolate.vue";
 
+const STROKE_DEG_2 = "#E1F5F3";
+const STROKE_DEG_3 = "#F9F9FB";
+
 // const syncStore = useSyncStore();
 const dataStore = useDataStore();
 
@@ -53,6 +56,7 @@ const getSecondaryEntities = (primaryNode) => {
     [node.isSubject ? "target" : "source"]: { ...primaryNode.position, id: primaryNode.entity.id },
     label: node.relation.predicate,
     degree: 2,
+    stroke: STROKE_DEG_2,
   }));
 
   return { nodes: [...positionEntities(subjects, true), ...positionEntities(objects, false)], edges };
@@ -164,6 +168,7 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
         [node.isSubject ? "target" : "source"]: { ...node.secondaryNode.position, id: node.secondaryNode.entity.id },
         label: node.relation.predicate,
         degree: 3,
+        stroke: STROKE_DEG_3,
       };
     }),
     ...placableNodes.map((node) => ({
@@ -171,6 +176,7 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
       [node.isSubject ? "target" : "source"]: { ...node.secondaryNode.position, id: node.secondaryNode.entity.id },
       label: node.relation.predicate,
       degree: 3,
+      stroke: STROKE_DEG_3,
     })),
     ...disputedNodes
       .map((node) => {
@@ -182,6 +188,7 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
           },
           label: subnode.relation.predicate,
           degree: 3,
+          stroke: STROKE_DEG_3,
         }));
       })
       .flat(),
