@@ -23,7 +23,6 @@ const wormPath = ref("M0,0L0,0");
 function worm(time) {
   if (phase.value === "IDLE") {
     wormPath.value = "M0,0L0,0";
-    console.log("IDLE");
     startTime = null;
     return;
   }
@@ -48,7 +47,6 @@ function worm(time) {
     wormPoints.length > 1
       ? `M${wormPoints.map((point) => `${point.x},${point.y}`).join(`L`)}`
       : `M${wormPoints[0]?.x || 0},${wormPoints[0]?.y || 0}L${wormPoints[0]?.x || 0},${wormPoints[0]?.y || 0}`;
-  console.log(wormPath.value);
   requestAnimationFrame(worm);
 }
 
