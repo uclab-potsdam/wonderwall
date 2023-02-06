@@ -1,12 +1,13 @@
 <script setup>
 import { useDataStore } from "@/stores/data";
-import { ref, computed } from "vue";
+import { storeToRefs } from "pinia";
+import { ref, computed, watch } from "vue";
 import uniqBy from "lodash.uniqby";
 import partition from "lodash.partition";
 import groupBy from "lodash.groupby";
 import VisEdge from "@/components/VisEdge.vue";
 import VisNode from "@/components/VisNode.vue";
-import BaseInterpolate from "@/components/BaseInterpolate.vue";
+// import BaseInterpolate from "@/components/BaseInterpolate.vue";
 
 const STROKE_DEG_2 = "#E1F5F3";
 const STROKE_DEG_3 = "#F9F9FB";
@@ -237,21 +238,32 @@ const layout = computed(() => {
   //   label: node.relation.predicate,
   // }));
 
+  // todo: check if uniqBy is actually needed
   const nodes = uniqBy([...tertiary.nodes, ...secondary.nodes, primaryNode], (node) => node.entity.id);
 
-  // const history = drawHistory(nodes);
+  const edges = [...tertiary.edges, ...secondary.edges].map((edge) => {
+    return {
+      ...edge,
+      next:
+        dataStore.history.includes(edge.source.id) && dataStore.history.includes(edge.target.id)
+          ? dataStore.history[0]
+          : null,
+    };
+  });
+
+  // const worm = drawWorm(nodes);
 
   return {
-    nodes: nodes,
-    edges: [...tertiary.edges, ...secondary.edges],
-    // history,
+    nodes,
+    edges,
+    // worm,
   };
 });
 
 const svg = ref(null);
 
 function enterFullscreen() {
-  console.log(svg.value.requestFullscreen());
+  svg.value.requestFullscreen();
 }
 </script>
 

@@ -90,8 +90,8 @@ export const useDataStore = defineStore("data", () => {
 
   function extendHistory() {
     const id = userActive.value || active.value;
-    if (history.value[0]?.id !== id) {
-      history.value.unshift([id]);
+    if (history.value[0] !== id) {
+      history.value.unshift(id);
       if (history.value.length > 2) {
         history.value = history.value.slice(0, 2);
       }
