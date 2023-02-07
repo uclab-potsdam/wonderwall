@@ -10,7 +10,7 @@ import VisNode from "@/components/VisNode.vue";
 // import BaseInterpolate from "@/components/BaseInterpolate.vue";
 
 const STROKE_DEG_2 = "#E1F5F3";
-const STROKE_DEG_3 = "#F9F9FB";
+const STROKE_DEG_3 = "#FFFFFF";
 
 // const syncStore = useSyncStore();
 const dataStore = useDataStore();
@@ -55,6 +55,7 @@ const getSecondaryEntities = (primaryNode) => {
   const edges = nodes.map((node) => ({
     [node.isSubject ? "source" : "target"]: { ...node.position, id: node.entity.id },
     [node.isSubject ? "target" : "source"]: { ...primaryNode.position, id: primaryNode.entity.id },
+    origin: primaryNode.entity.id,
     label: node.relation.predicate,
     degree: 2,
     stroke: STROKE_DEG_2,
@@ -168,6 +169,7 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
         [node.isSubject ? "source" : "target"]: { ...originalNode.position, id: originalNode.entity.id },
         [node.isSubject ? "target" : "source"]: { ...node.secondaryNode.position, id: node.secondaryNode.entity.id },
         label: node.relation.predicate,
+        origin: node.secondaryNode.entity.id,
         degree: 3,
         stroke: STROKE_DEG_3,
       };
@@ -176,6 +178,7 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
       [node.isSubject ? "source" : "target"]: { ...node.position, id: node.entity.id },
       [node.isSubject ? "target" : "source"]: { ...node.secondaryNode.position, id: node.secondaryNode.entity.id },
       label: node.relation.predicate,
+      origin: node.secondaryNode.entity.id,
       degree: 3,
       stroke: STROKE_DEG_3,
     })),
@@ -187,6 +190,7 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
             ...subnode.secondaryNode.position,
             id: subnode.secondaryNode.entity.id,
           },
+          origin: subnode.secondaryNode.entity.id,
           label: subnode.relation.predicate,
           degree: 3,
           stroke: STROKE_DEG_3,
@@ -196,30 +200,6 @@ const getTertiaryEntities = (primaryNode, secondaryNodes) => {
   ];
   return { nodes: [...placableNodes, ...disputedNodes], edges };
 };
-
-// function drawHistory(nodes) {
-//   const historyNodes = dataStore.history.map((item) => {
-//     const node = nodes.find((node) => node.entity.id === item.id);
-//     return {
-//       id: node?.entity.id,
-//       x: item.x + node?.position.x,
-//       y: item.y + node?.position.y,
-//       gen: item.gen,
-//     };
-//   });
-
-//   const historyEdges = historyNodes
-//     .filter((node) => node.id != null)
-//     .map((node, i, nodes) => ({ source: node, target: nodes[i + 1], history: true }))
-//     .filter((node, i, nodes) => i < nodes.length - 1);
-
-//   console.log("draw history", historyNodes, historyEdges);
-//   return historyEdges;
-
-//   // { ...originalNode.position, id: originalNode.entity.id },
-//   // console.log(historyNodes);
-//   // return historyNodes;
-// }
 
 const layout = computed(() => {
   if (dataStore.activeEntity == null) return [];
@@ -269,6 +249,11 @@ function enterFullscreen() {
 
 <template>
   <svg ref="svg" @dblclick="enterFullscreen">
+    <defs>
+      <marker id="arrow" markerWidth="15" markerHeight="10" refX="7" refY="5" orient="auto">
+        <path d="M2,1 L7,5 L2,9" stroke="#216B5E" fill="none" />
+      </marker>
+    </defs>
     <g :transform="`translate(${width / 2} ${height / 2})`">
       <g class="edges" v-if="dataStore.activeEntity">
         <!-- <g class="edges" v-if="dataStore.activeEntity">
