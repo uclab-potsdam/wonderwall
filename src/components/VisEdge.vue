@@ -144,7 +144,7 @@ watch(
     &.broad {
       stroke-linecap: round;
       &.next {
-        stroke: rgb(var(--orange-7));
+        stroke: rgb(var(--teal-7));
         // opacity: 0.8;
         // filter: blur(10px);
       }
@@ -170,12 +170,13 @@ watch(
 
   &.degree-3 {
     path {
-      opacity: 0.3;
+      opacity: 0.4;
       &.fine {
         opacity: 0.07;
       }
       // stroke: rgb(var(--blue-gray-2));
       &.broad {
+        filter: blur(20px);
         // transition: stroke 0.75s ease-in-out, opacity 0.75s ease-in-out;
         // stroke: rgb(var(--blue-gray-11));
         // &.no-history {

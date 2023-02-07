@@ -254,7 +254,7 @@ function enterFullscreen() {
         <path d="M2,1 L7,5 L2,9" stroke="#216B5E" fill="none" />
       </marker>
     </defs>
-    <g :transform="`translate(${width / 2} ${height / 2})`">
+    <g class="svg-root" :transform="`translate(${width / 2} ${height / 2})`">
       <g class="edges" v-if="dataStore.activeEntity">
         <!-- <g class="edges" v-if="dataStore.activeEntity">
           <BaseInterpolate
@@ -316,6 +316,10 @@ svg {
   width: 100%;
   height: 100%;
   background: rgb(var(--blue-gray-9));
+
+  .svg-root {
+    isolation: isolate;
+  }
 
   .links {
     .link {
