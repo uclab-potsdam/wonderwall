@@ -3,90 +3,293 @@
     "label": "Campinarana",
     "id": "_ea96ff2f7059f1374296c046eb738011c4d2311ee61b7136983a57f1e525f3da",
     "in": 37.708333333333336,
-    "out": 228.83333333333334
+    "out": 44.5
   },
   {
     "label": "forest",
     "id": "_e7558134e2d061d5b99e5144cf31d710cbb668fb414746a37d0988bfd116eb8b",
     "in": 44.5,
-    "out": 228.83333333333334
+    "out": 56.75
   },
+  { "label": "Campinarana", "id": "_ea96ff2f7059f1374296c046eb738011c4d2311ee61b7136983a57f1e525f3da" },
+  { "label": "riverbed", "id": "_94acdfcd1fa224c1866258b9aab435e2281f196f44ca56dc9a86f4737288e7c8" },
   {
-    "label": "Oomaphitako Leaves",
-    "id": "_3835d15ca178d7c4b9f57ac1b544b2af5db3a86308378f210da0e2d11a620ee2",
-    "in": 82.66666666666667,
-    "out": 92
+    "label": "Collecting Clay",
+    "id": "_076084c3967126f59c23ef72aeb6bb245c0bd352a8bd3506f486475cee56ebe8",
+    "in": 56.75,
+    "out": 63.25
+  },
+  { "label": "riverbed", "id": "_94acdfcd1fa224c1866258b9aab435e2281f196f44ca56dc9a86f4737288e7c8" },
+  { "label": "Campinarana", "id": "_ea96ff2f7059f1374296c046eb738011c4d2311ee61b7136983a57f1e525f3da" },
+  {
+    "label": "forest",
+    "id": "_e7558134e2d061d5b99e5144cf31d710cbb668fb414746a37d0988bfd116eb8b",
+    "in": 63.25,
+    "out": 70.58333333333333
   },
   {
     "label": "Collecting Oomaphitako",
     "id": "_83d5d824b9997d1fd4d0aa2f28ba75dc241f057a7864fa2487614cd76f258567",
     "in": 70.58333333333333,
-    "out": 92
+    "out": 76.375
   },
+  { "label": "forest", "id": "_e7558134e2d061d5b99e5144cf31d710cbb668fb414746a37d0988bfd116eb8b" },
+  { "label": "Cutting Bark", "id": "_a048f76aa4137b308a5382579c650a6af230c60cf3aae082363f416645163429" },
   {
     "label": "Kawa Bark",
     "id": "_b5519b9326551e5c6a6894906bb5f87fc78fbea85d9295dfb0df294d2715a77a",
     "in": 92.04166666666667,
-    "out": 117.66666666666667
+    "out": 101.625
   },
-  {
-    "label": "Cutting Bark",
-    "id": "_a048f76aa4137b308a5382579c650a6af230c60cf3aae082363f416645163429",
-    "in": 92.04166666666667,
-    "out": 117.66666666666667
-  },
+  { "label": "carrying resources", "id": "_32ac3497bfd650875650d8e9bd0956669dab5a6d500181172f2b167ba734dfbf" },
+  { "label": "Clay", "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494" },
   {
     "label": "Collecting Clay",
     "id": "_076084c3967126f59c23ef72aeb6bb245c0bd352a8bd3506f486475cee56ebe8",
-    "in": 117.70833333333333,
-    "out": 213.83333333333334
-  },
-  {
-    "label": "Clay",
-    "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494",
-    "in": 125.16666666666667,
-    "out": 213.83333333333334
+    "in": 115.20833333333333,
+    "out": 117.70833333333333
   },
   {
     "label": "riverbed",
     "id": "_94acdfcd1fa224c1866258b9aab435e2281f196f44ca56dc9a86f4737288e7c8",
-    "in": 139.125,
-    "out": 213.83333333333334
+    "in": 117.70833333333333,
+    "out": 120.54166666666667
+  },
+  { "label": "Collecting Clay", "id": "_076084c3967126f59c23ef72aeb6bb245c0bd352a8bd3506f486475cee56ebe8" },
+  {
+    "label": "Clay",
+    "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494",
+    "in": 124.66666666666667,
+    "out": 146.41666666666666
   },
   {
     "label": "Anaconda (the clays owner)",
     "id": "_95054e3e5904a6ef22f082059e955264e86aa491896fc10b1651490265c8f1d1",
     "in": 146.41666666666666,
-    "out": 149.91666666666666
+    "out": 149.70833333333334
+  },
+  {
+    "label": "Clay",
+    "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494",
+    "in": 149.70833333333334,
+    "out": 176.45833333333334
   },
   {
     "label": "Anaconda (the clays owner)",
     "id": "_95054e3e5904a6ef22f082059e955264e86aa491896fc10b1651490265c8f1d1",
-    "in": 176.5,
-    "out": 191.875
+    "in": 176.45833333333334,
+    "out": 191.91666666666666
   },
+  {
+    "label": "Clay",
+    "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494",
+    "in": 191.91666666666666,
+    "out": 200.75
+  },
+  { "label": "carrying resources", "id": "_32ac3497bfd650875650d8e9bd0956669dab5a6d500181172f2b167ba734dfbf" },
   {
     "label": "Aturá",
     "id": "_fdab2bcb1fed22425393f3817bb3edbc4e0589623b1f176887ff2fcb4d6b97c4",
-    "in": 101.625,
-    "out": 125.125
-  },
-  {
-    "label": "Aturá",
-    "id": "_fdab2bcb1fed22425393f3817bb3edbc4e0589623b1f176887ff2fcb4d6b97c4",
-    "in": 199.16666666666666,
-    "out": 228.83333333333334
+    "in": 200.75,
+    "out": 215
   },
   {
     "label": "carrying resources",
     "id": "_32ac3497bfd650875650d8e9bd0956669dab5a6d500181172f2b167ba734dfbf",
-    "in": 213.875,
+    "in": 215,
     "out": 228.83333333333334
   },
   {
     "label": "Village",
     "id": "_819fe4cdd3fdc41ef42dd08ba01049b2d49456c6c3d9bb66e5c598bbe51f0263",
-    "in": 228.70833333333334,
-    "out": 669.0833333333334
+    "in": 228.83333333333334,
+    "out": 249.33333333333334
+  },
+  {
+    "label": "burning bark",
+    "id": "_c83501051efc6987749ed7f653a57dc5c42c5fb7b9e4356e983c43c4f225f188",
+    "in": 249.33333333333334,
+    "out": 273.8333333333333
+  },
+  {
+    "label": "kawa bark ashes",
+    "id": "_0216bd093fa75cadd1dd319e9138bdfc12064dcf3aacbc17476dc0c289ef1c82",
+    "in": 273.8333333333333,
+    "out": 282.9166666666667
+  },
+  {
+    "label": "pounding",
+    "id": "_449d3c7adc4b887bb2c7b669e4dea342034725d4cfaa84f077b34f16cf0723b2",
+    "in": 282.9166666666667,
+    "out": 286.5
+  },
+  {
+    "label": "pounded kawa bark ashes",
+    "id": "_9ec65dcd0cae5ab0b049425e1e2a4cc267c3701d91b635d855c1b0a04dcca413",
+    "in": 297.7916666666667,
+    "out": 300.5833333333333
+  },
+  {
+    "label": "sieving",
+    "id": "_463157d7bd80e0b7a13631b849fcd27a311f6ee8e532dc855b791e601daab628",
+    "in": 300.5833333333333,
+    "out": 311.375
+  },
+  { "label": "powder", "id": "_434186421d04adc7b4aa95b72c4600d6305b897a78ae4a1929086401d2597bfb" },
+  {
+    "label": "mixing",
+    "id": "_a24b69e4b92b1db2a43666e913f46d75a7846d758f680a69a843d124b5a76b2b",
+    "in": 311.375,
+    "out": 316.2083333333333
+  },
+  { "label": "modelling clay", "id": "_2eb0447c8a1a9c6d4945f05ae078df82c89bdecd7e688bbaeda2f593feb4705c" },
+  {
+    "label": "rolling clay",
+    "id": "_4e0d2f516c77758bcc13b72ef86464a95c3be072957f3e3bce010394034b2082",
+    "in": 316.2083333333333,
+    "out": 319.1666666666667
+  },
+  {
+    "label": "modelling clay",
+    "id": "_2eb0447c8a1a9c6d4945f05ae078df82c89bdecd7e688bbaeda2f593feb4705c",
+    "in": 319.1666666666667,
+    "out": 332.2083333333333
+  },
+  {
+    "label": "rolling clay",
+    "id": "_4e0d2f516c77758bcc13b72ef86464a95c3be072957f3e3bce010394034b2082",
+    "in": 332.2083333333333,
+    "out": 338.3333333333333
+  },
+  { "label": "modelling clay", "id": "_2eb0447c8a1a9c6d4945f05ae078df82c89bdecd7e688bbaeda2f593feb4705c" },
+  { "label": "mixing", "id": "_a24b69e4b92b1db2a43666e913f46d75a7846d758f680a69a843d124b5a76b2b" },
+  {
+    "label": "removing gravels",
+    "id": "_5f2e1746379245f7beac2d55a2aff756bac21d9a0353f4c2995c9937831d8a9d",
+    "in": 338.3333333333333,
+    "out": 358.6666666666667
+  },
+  { "label": "mixing", "id": "_a24b69e4b92b1db2a43666e913f46d75a7846d758f680a69a843d124b5a76b2b" },
+  { "label": "Clay", "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494" },
+  { "label": "carrying resources", "id": "_32ac3497bfd650875650d8e9bd0956669dab5a6d500181172f2b167ba734dfbf" },
+  {
+    "label": "Village",
+    "id": "_819fe4cdd3fdc41ef42dd08ba01049b2d49456c6c3d9bb66e5c598bbe51f0263",
+    "in": 358.6666666666667,
+    "out": 366
+  },
+  {
+    "label": "carrying resources",
+    "id": "_32ac3497bfd650875650d8e9bd0956669dab5a6d500181172f2b167ba734dfbf",
+    "in": 366,
+    "out": 374.0416666666667
+  },
+  { "label": "Clay", "id": "_46ef3fb401b8e19a7408a33031c55b584f72c599d62a493b65f8bd9064d35494" },
+  { "label": "mixing", "id": "_a24b69e4b92b1db2a43666e913f46d75a7846d758f680a69a843d124b5a76b2b" },
+  { "label": "modelling clay", "id": "_2eb0447c8a1a9c6d4945f05ae078df82c89bdecd7e688bbaeda2f593feb4705c" },
+  {
+    "label": "rolling clay",
+    "id": "_4e0d2f516c77758bcc13b72ef86464a95c3be072957f3e3bce010394034b2082",
+    "in": 374.0416666666667,
+    "out": 377.9166666666667
+  },
+  {
+    "label": "mat",
+    "id": "_0f3b7225896758f81d6b2c5eaeb8c95953353aedf319494b7c1216b015465e54",
+    "in": 377.9166666666667,
+    "out": 389
+  },
+  { "label": "mat", "id": "_0f3b7225896758f81d6b2c5eaeb8c95953353aedf319494b7c1216b015465e54" },
+  { "label": "rolling clay", "id": "_4e0d2f516c77758bcc13b72ef86464a95c3be072957f3e3bce010394034b2082" },
+  {
+    "label": "shaping vessel",
+    "id": "_74ff64fc5e101efc2df1c6b8b7b7f88e801f00d140e314422cfff33d84abeb71",
+    "in": 393.8333333333333,
+    "out": 412.2916666666667
+  },
+  {
+    "label": "gourd",
+    "id": "_7df329b4391cf4861a47e413311cdd31a032f1c0491e6abd42ff083c2cee1c8d",
+    "in": 412.2916666666667,
+    "out": 418.2916666666667
+  },
+  {
+    "label": "shaping vessel",
+    "id": "_74ff64fc5e101efc2df1c6b8b7b7f88e801f00d140e314422cfff33d84abeb71",
+    "in": 412.2916666666667,
+    "out": 433.1666666666667
+  },
+  {
+    "label": "drying vessel",
+    "id": "_66dd06cbafaeccacb89a98210a31cfbf4ba8ae243ee90894c60d2843695b2da5",
+    "in": 433.1666666666667,
+    "out": 445.375
+  },
+  {
+    "label": "scraping vessel",
+    "id": "_d964dc986f08268852cf1bb823c8ff3fef99470a855f335fb9e27b777a11bd92",
+    "in": 448.6666666666667,
+    "out": 464.0416666666667
+  },
+  { "label": "polishing vessel", "id": "_e2fce6290c58830206d63fed46859fc771fd370273aa9deda0890bdaa419fd90" },
+  {
+    "label": "Doowhe (Polisher)",
+    "id": "_df99a4c1d91c452f82c45a3ed8729ca7cdca1090eb2cccaab16c1e1afe0fddea",
+    "in": 464.0416666666667,
+    "out": 471.3333333333333
+  },
+  { "label": "polishing vessel", "id": "_e2fce6290c58830206d63fed46859fc771fd370273aa9deda0890bdaa419fd90" },
+  {
+    "label": "removing gravels",
+    "id": "_5f2e1746379245f7beac2d55a2aff756bac21d9a0353f4c2995c9937831d8a9d",
+    "in": 471.3333333333333,
+    "out": 505
+  },
+  {
+    "label": "polishing vessel",
+    "id": "_e2fce6290c58830206d63fed46859fc771fd370273aa9deda0890bdaa419fd90",
+    "in": 505,
+    "out": 529
+  },
+  { "label": "scraping vessel", "id": "_d964dc986f08268852cf1bb823c8ff3fef99470a855f335fb9e27b777a11bd92" },
+  {
+    "label": "polishing vessel",
+    "id": "_e2fce6290c58830206d63fed46859fc771fd370273aa9deda0890bdaa419fd90",
+    "in": 532.8333333333334,
+    "out": 543.25
+  },
+  {
+    "label": "scraping vessel",
+    "id": "_d964dc986f08268852cf1bb823c8ff3fef99470a855f335fb9e27b777a11bd92",
+    "in": 543.25,
+    "out": 669.125
+  },
+  { "label": "modelling", "id": "_15089a5f5815b3c0786f5158333b333b81863e66e1d78c97c7738e6ec4ce466b" },
+  { "label": "Village", "id": "_819fe4cdd3fdc41ef42dd08ba01049b2d49456c6c3d9bb66e5c598bbe51f0263" },
+  {
+    "label": "river",
+    "id": "_983299e9a2bece3e5a329e48387839b8545f7614fa2824f50669975fc5949718",
+    "in": 669.125,
+    "out": 686.375
+  },
+  { "label": "Village", "id": "_819fe4cdd3fdc41ef42dd08ba01049b2d49456c6c3d9bb66e5c598bbe51f0263" },
+  { "label": "modelling", "id": "_15089a5f5815b3c0786f5158333b333b81863e66e1d78c97c7738e6ec4ce466b" },
+  {
+    "label": "painting",
+    "id": "_57c872dd78f25b30ce16e1043b8512443a59b8f4b8c23cf55b3dea0d705a247a",
+    "in": 690.1666666666666,
+    "out": 690.1666666666666
+  },
+  {
+    "label": "Baniwa Women",
+    "id": "_0c74e88e9d28c9b3702295e12a5c55922c64aa5b8c48d5ce39cfdbb29fc35211",
+    "in": 702.1666666666666,
+    "out": 705.625
+  },
+  {
+    "label": "scraping vessel",
+    "id": "_d964dc986f08268852cf1bb823c8ff3fef99470a855f335fb9e27b777a11bd92",
+    "in": 705.625,
+    "out": 669.125
   }
 ]

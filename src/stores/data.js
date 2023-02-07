@@ -133,7 +133,41 @@ export const useDataStore = defineStore("data", () => {
       )
     );
 
-    ranges.value = await fetch("/ranges-2.json").then((d) => d.json());
+    ranges.value = await fetch("/ranges.json")
+      .then((d) => d.json())
+      .then((ranges) =>
+        ranges.map((range, index, ranges) => {
+          const duration = 2;
+          if (range.in != null) return range;
+          const next = ranges.findIndex((r, i) => i > index && r.in != null);
+          const previous = ranges.findLast((r, i) => i < index && r.in != null);
+          const inTime = ranges[next].in - duration * (next - index);
+          if (inTime - duration <= previous.in) {
+            console.log("RANGE CONFLICT", inTime - previous.in, range);
+            console.log(
+              "previous",
+              new Date(previous.in * 1000)
+                .toISOString()
+                .replace(/[^:]+:/, "")
+                .replace(/Z/, ""),
+              previous
+            );
+            console.log(
+              "next",
+              new Date(ranges[next].in * 1000)
+                .toISOString()
+                .replace(/[^:]+:/, "")
+                .replace(/Z/, ""),
+              ranges[next]
+            );
+            console.log("\n\n");
+          }
+          return {
+            ...range,
+            in: inTime,
+          };
+        })
+      );
   }
 
   async function requestEntitiesAndRelations(ids, deg) {
