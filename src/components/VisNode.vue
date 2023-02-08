@@ -153,6 +153,9 @@ const props = defineProps(["entity", "position", "degree"]);
       foreignObject {
         .entity {
           transform: scale(1.2);
+          &.shadow {
+            -webkit-text-stroke: 5px rgb(var(--teal-7));
+          }
         }
       }
       circle.light {
