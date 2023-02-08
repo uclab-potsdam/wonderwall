@@ -249,7 +249,7 @@ function enterFullscreen() {
 
 <template>
   <div ref="svg" class="svg-wrapper">
-    <svg @dblclick="enterFullscreen">
+    <svg @dblclick="enterFullscreen" @mousemove="dataStore.registerMovement">
       <defs>
         <marker id="arrow" markerWidth="15" markerHeight="10" refX="7" refY="5" orient="auto">
           <path d="M2,1 L7,5 L2,9" stroke="#216B5E" fill="none" />

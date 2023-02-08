@@ -277,12 +277,20 @@ export const useDataStore = defineStore("data", () => {
     userInterectedTimeout = setTimeout(() => {
       userActive.value = null;
       extendHistory();
-    }, 15000);
+    }, 5000);
     // userIds.value.push(node.id);
     // setTimeout(() => {
     //   const index = userIds.value.indexOf(node.id);
     //   if (index != -1) userIds.value.splice(index, 1);
     // }, 1000 * 15);
+  }
+
+  function registerMovement() {
+    clearTimeout(userInterectedTimeout);
+    userInterectedTimeout = setTimeout(() => {
+      userActive.value = null;
+      extendHistory();
+    }, 5000);
   }
 
   return {
@@ -301,6 +309,7 @@ export const useDataStore = defineStore("data", () => {
     requestEntitiesAndRelations,
     historyPath,
     history,
+    registerMovement,
   };
 });
 
