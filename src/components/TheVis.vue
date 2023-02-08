@@ -218,8 +218,8 @@ const layout = computed(() => {
   //   label: node.relation.predicate,
   // }));
 
-  // todo: check if uniqBy is actually needed
-  const nodes = uniqBy([...tertiary.nodes, ...secondary.nodes, primaryNode], (node) => node.entity.id);
+  // const nodes = uniqBy([...tertiary.nodes, ...secondary.nodes, primaryNode], (node) => node.entity.id);
+  const nodes = [...secondary.nodes, primaryNode];
 
   const edges = [...tertiary.edges, ...secondary.edges].map((edge) => {
     return {
@@ -248,15 +248,17 @@ function enterFullscreen() {
 </script>
 
 <template>
-  <svg ref="svg" @dblclick="enterFullscreen">
-    <defs>
-      <marker id="arrow" markerWidth="15" markerHeight="10" refX="7" refY="5" orient="auto">
-        <path d="M2,1 L7,5 L2,9" stroke="#216B5E" fill="none" />
-      </marker>
-    </defs>
-    <g class="svg-root" :transform="`translate(${width / 2} ${height / 2})`">
-      <g class="edges" v-if="dataStore.activeEntity">
-        <!-- <g class="edges" v-if="dataStore.activeEntity">
+  <div ref="svg" class="svg-wrapper">
+    <svg @dblclick="enterFullscreen">
+      <defs>
+        <marker id="arrow" markerWidth="15" markerHeight="10" refX="7" refY="5" orient="auto">
+          <path d="M2,1 L7,5 L2,9" stroke="#216B5E" fill="none" />
+        </marker>
+      </defs>
+      <rect class="background" :width="width" :height="height" />
+      <g class="svg-root" :transform="`translate(${width / 2} ${height / 2})`">
+        <g class="edges" v-if="dataStore.activeEntity">
+          <!-- <g class="edges" v-if="dataStore.activeEntity">
           <BaseInterpolate
             v-for="edge in layout.edges"
             :key="`${edge.source.id}--${edge.label}--${edge.target.id}`"
@@ -266,15 +268,15 @@ function enterFullscreen() {
             <VisEdge v-bind="interpolated.edge" />
           </BaseInterpolate>
         </g> -->
-        <TransitionGroup name="default">
-          <VisEdge
-            v-for="edge in layout.edges"
-            :key="`${edge.source.id}--${edge.label}--${edge.target.id}`"
-            v-bind="edge"
-          />
-        </TransitionGroup>
-      </g>
-      <!-- <g class="history-path">
+          <TransitionGroup name="default">
+            <VisEdge
+              v-for="edge in layout.edges"
+              :key="`${edge.source.id}--${edge.label}--${edge.target.id}`"
+              v-bind="edge"
+            />
+          </TransitionGroup>
+        </g>
+        <!-- <g class="history-path">
         <TransitionGroup name="default">
           <VisEdge
             v-for="edge in layout.history"
@@ -283,7 +285,7 @@ function enterFullscreen() {
           />
         </TransitionGroup>
       </g> -->
-      <!-- <g class="nodes" v-if="dataStore.activeEntity">
+        <!-- <g class="nodes" v-if="dataStore.activeEntity">
         <BaseInterpolate
           v-for="node in layout.nodes"
           :key="node.entity.id"
@@ -294,20 +296,21 @@ function enterFullscreen() {
         </BaseInterpolate>
       </g> -->
 
-      <g class="nodes" v-if="dataStore.activeEntity">
-        <TransitionGroup name="default">
-          <VisNode
-            v-for="node in layout.nodes"
-            :key="node.entity.id"
-            :entity="node.entity"
-            :position="node.position"
-            :degree="node.degree"
-            @select="dataStore.select"
-          />
-        </TransitionGroup>
+        <g class="nodes" v-if="dataStore.activeEntity">
+          <TransitionGroup name="default">
+            <VisNode
+              v-for="node in layout.nodes"
+              :key="node.entity.id"
+              :entity="node.entity"
+              :position="node.position"
+              :degree="node.degree"
+              @select="dataStore.select"
+            />
+          </TransitionGroup>
+        </g>
       </g>
-    </g>
-  </svg>
+    </svg>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -315,7 +318,11 @@ svg {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgb(var(--blue-gray-9));
+
+  .background {
+    fill: rgb(var(--blue-gray-9));
+    stroke: none;
+  }
 
   .svg-root {
     isolation: isolate;

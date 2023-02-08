@@ -137,12 +137,14 @@ watch(
     font-size: var(--font-size);
     fill: rgb(var(--blue-gray-2));
     text-transform: uppercase;
+    cursor: default;
   }
 
   path {
     fill: none;
     &.broad {
       stroke-linecap: round;
+      transition: filter 1.5s;
       &.next {
         stroke: rgb(var(--teal-7));
         // opacity: 0.8;

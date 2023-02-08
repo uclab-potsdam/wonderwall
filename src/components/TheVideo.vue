@@ -3,7 +3,7 @@ import { useSyncStore } from "@/stores/sync";
 import { ref, onMounted } from "vue";
 
 const video = ref(null);
-const range = [38, 669];
+const range = [37, 543];
 
 const syncStore = useSyncStore();
 
