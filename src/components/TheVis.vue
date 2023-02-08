@@ -252,7 +252,7 @@ function enterFullscreen() {
     <svg @dblclick="enterFullscreen" @mousemove="dataStore.registerMovement">
       <defs>
         <marker id="arrow" markerWidth="15" markerHeight="10" refX="7" refY="5" orient="auto">
-          <path d="M2,1 L7,5 L2,9" stroke="#216B5E" fill="none" />
+          <path d="M2,1 L7,5 L2,9" fill="none" />
         </marker>
       </defs>
       <rect class="background" :width="width" :height="height" />
@@ -318,6 +318,12 @@ svg {
   position: absolute;
   width: 100%;
   height: 100%;
+
+  #arrow {
+    path {
+      stroke: rgb(var(--teal-4));
+    }
+  }
 
   .background {
     fill: rgb(var(--blue-gray-9));

@@ -144,7 +144,7 @@ watch(
     fill: none;
     &.broad {
       stroke-linecap: round;
-      transition: filter 1.5s;
+      transition: filter 1.5s, stroke 1.5s, opacity 1.5s;
       &.next {
         stroke: rgb(var(--teal-7));
         // opacity: 0.8;
@@ -152,7 +152,7 @@ watch(
       }
     }
     &.fine {
-      stroke: rgb(var(--blue-gray-2));
+      stroke: rgb(var(--teal-4));
     }
   }
 

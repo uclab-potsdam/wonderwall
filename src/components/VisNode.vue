@@ -51,10 +51,10 @@ const props = defineProps(["entity", "position", "degree"]);
         <circle class="light" r="36" />
         <g transform="translate(-30 -30)">
           <foreignObject width="200" height="60">
-            <div class="entity shadow">
+            <!-- <div class="entity shadow">
               <div class="label">{{ props.entity.label?.en }}</div>
               <div class="type">{{ props.entity.type }}</div>
-            </div>
+            </div> -->
             <div class="entity">
               <div class="label">{{ props.entity.label?.en }}</div>
               <div class="type">{{ props.entity.type }}</div>
@@ -97,7 +97,7 @@ const props = defineProps(["entity", "position", "degree"]);
     font-size: var(--font-size-l);
     &.shadow {
       transition: -webkit-text-stroke 0.2s;
-      -webkit-text-stroke: 5px #e1f5f3;
+      // -webkit-text-stroke: 5px #e1f5f3;
     }
     // text-shadow: 0 0 2px rgb(var(--teal-10)), 0 0 2px rgb(var(--teal-10)), 0 0 2px rgb(var(--teal-10)),
     // 0 0 2px rgb(var(--teal-10)), 0 0 2px rgb(var(--teal-10));
@@ -124,7 +124,7 @@ const props = defineProps(["entity", "position", "degree"]);
       cursor: default;
       transform: scale(1.2);
       &.shadow {
-        -webkit-text-stroke: 5px rgb(var(--teal-7));
+        // -webkit-text-stroke: 5px rgb(var(--teal-7));
       }
     }
     circle {
@@ -132,7 +132,7 @@ const props = defineProps(["entity", "position", "degree"]);
     }
     circle.dark {
       fill: rgb(var(--teal-7));
-      transform: scale(1.5);
+      transform: scale(1.3);
       transition: fill 0.2s 1.5s, transform 0.2s 1.5s;
     }
   }
@@ -141,20 +141,20 @@ const props = defineProps(["entity", "position", "degree"]);
       .entity {
         transform: scale(1.1);
         &.shadow {
-          -webkit-text-stroke: 5px rgb(var(--teal-10));
+          // -webkit-text-stroke: 5px rgb(var(--teal-10));
         }
       }
     }
     circle.light {
       fill: rgb(var(--teal-10));
-      transform: scale(1.3);
+      transform: scale(1.2);
     }
     &.degree-1 {
       foreignObject {
         .entity {
           transform: scale(1.2);
           &.shadow {
-            -webkit-text-stroke: 5px rgb(var(--teal-7));
+            // -webkit-text-stroke: 5px rgb(var(--teal-7));
           }
         }
       }
