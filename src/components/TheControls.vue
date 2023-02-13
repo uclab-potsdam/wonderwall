@@ -46,8 +46,7 @@ function hideProgress() {
   userProgress.value = null;
 }
 
-function setProgress(time, e) {
-  console.log(time);
+function setProgress(time) {
   syncStore.setTime(time || userTime.value);
 }
 </script>
@@ -55,8 +54,8 @@ function setProgress(time, e) {
 <template>
   <div class="controls">
     <div class="button-group">
-      <div class="play">P</div>
-      <div class="play">M</div>
+      <div role="button" class="play">P</div>
+      <div role="button" class="play">M</div>
     </div>
     <div
       class="progress-bar"
@@ -111,6 +110,14 @@ function setProgress(time, e) {
   .button-group {
     gap: var(--spacing);
     > div {
+      &.active {
+        color: rgb(var(--teal-5));
+      }
+      &:hover {
+        color: rgb(var(--teal-1));
+      }
+      transition: color 0.5s;
+      cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;

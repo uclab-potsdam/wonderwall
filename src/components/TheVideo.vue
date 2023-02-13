@@ -4,6 +4,7 @@ import { ref, onMounted, watch } from "vue";
 
 const video = ref(null);
 const range = [37, 543];
+const pip = ref(false);
 
 const syncStore = useSyncStore();
 
@@ -49,7 +50,18 @@ function setDuration() {
 </script>
 
 <template>
-  <video id="tunnel" width="100%" loop x-autoplay muted ref="video" controls @durationchange="setDuration">
+  <video
+    id="tunnel"
+    width="100%"
+    loop
+    x-autoplay
+    muted
+    ref="video"
+    :class="{ pip }"
+    @durationchange="setDuration"
+    @enterpictureinpicture="pip = true"
+    @leavepictureinpicture="pip = false"
+  >
     <source src="/baniwa.webm" type="video/webm" preload />
   </video>
 </template>
@@ -63,5 +75,9 @@ video {
   width: 100%;
   height: 100%;
   transition: filter 0.4s, opacity 0.4s;
+
+  &.pip {
+    display: none;
+  }
 }
 </style>
