@@ -9,10 +9,11 @@ const dataStore = useDataStore();
 const formattedTime = computed(() => formatTime(syncStore.time));
 
 const timestamps = computed(() => {
-  return dataStore.activeEntityTimestamps.map((time) => {
+  return dataStore.currentEntityTimestamps.map((timestamp) => {
     return {
-      time,
-      progress: time / syncStore.duration,
+      time: timestamp.in,
+      active: timestamp.active,
+      progress: timestamp.in / syncStore.duration,
     };
   });
 });
@@ -87,6 +88,7 @@ onMounted(() => {
           v-for="(ts, i) in timestamps"
           :key="i"
           :style="{ left: `${ts.progress * 100}%` }"
+          :class="{ active: ts.active }"
           @click.stop="setProgress(ts.time)"
         />
       </div>
@@ -186,13 +188,21 @@ onMounted(() => {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgb(var(--teal-5));
+        background: rgb(var(--teal-10));
         transform: translate(-50%, 50%);
         transition: transform 0.2s, background 0.2s;
 
         &:hover {
           transform: translate(-50%, 50%) scale(1.4);
-          background: rgb(var(--teal-6));
+          background: rgb(var(--teal-8));
+        }
+
+        &.active {
+          background: rgb(var(--teal-5));
+
+          &:hover {
+            background: rgb(var(--teal-3));
+          }
         }
       }
     }

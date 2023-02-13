@@ -63,7 +63,24 @@ export const useDataStore = defineStore("data", () => {
     return ranges.value.filter((r) => r.id === activeEntity.value?.id).map((d) => d.in);
   });
 
+  const currentEntityTimestamps = computed(() => {
+    return [
+      ...new Set(
+        relations.value
+          .filter((r) => r.subject === activeEntity.value?.id || r.object === activeEntity.value?.id)
+          .map((r) => [r.subject, r.object])
+          .flat()
+      ),
+    ]
+      .map((id) =>
+        ranges.value.filter((r) => r.id === id).map((d) => ({ in: d.in, active: d.id === activeEntity.value?.id }))
+      )
+      .flat()
+      .sort((r) => (r.active ? 1 : -1));
+  });
+
   const activeEntity = computed(() => entities.value.find((e) => e.id === (userActive.value || active.value)));
+
   const historyPath = computed(() =>
     history.value.filter((id, i) => i < history.value.length - 2).map((id, i) => [id.id, history.value[i + 1].id])
   );
@@ -316,6 +333,7 @@ export const useDataStore = defineStore("data", () => {
     history,
     registerMovement,
     activeEntityTimestamps,
+    currentEntityTimestamps,
   };
 });
 
