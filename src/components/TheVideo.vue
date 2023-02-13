@@ -26,6 +26,24 @@ watch(
   }
 );
 
+watch(
+  () => syncStore.playing,
+  () => {
+    video.value[syncStore.playing ? "play" : "pause"]();
+  }
+);
+
+watch(
+  () => syncStore.mute,
+  () => {
+    video.value.muted = syncStore.mute;
+  }
+);
+
+function onVolumeChange() {
+  syncStore.setMute(video.value.muted);
+}
+
 function setDuration() {
   syncStore.setDuration(video.value.duration);
 }
@@ -61,6 +79,9 @@ function setDuration() {
     @durationchange="setDuration"
     @enterpictureinpicture="pip = true"
     @leavepictureinpicture="pip = false"
+    @play="syncStore.setPlaying(true)"
+    @pause="syncStore.setPlaying(false)"
+    @volumechange="onVolumeChange"
   >
     <source src="/baniwa.webm" type="video/webm" preload />
   </video>

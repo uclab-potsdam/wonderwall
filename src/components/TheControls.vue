@@ -1,7 +1,7 @@
 <script setup>
 import { useSyncStore } from "@/stores/sync";
 import { useDataStore } from "@/stores/data";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const syncStore = useSyncStore();
 const dataStore = useDataStore();
@@ -49,13 +49,24 @@ function hideProgress() {
 function setProgress(time) {
   syncStore.setTime(time || userTime.value);
 }
+
+function togglePlay() {
+  syncStore.togglePlay();
+}
+function toggleMute() {
+  syncStore.toggleMute();
+}
+
+onMounted(() => {
+  syncStore.requestDuration();
+});
 </script>
 
 <template>
   <div class="controls">
     <div class="button-group">
-      <div role="button" class="play">P</div>
-      <div role="button" class="play">M</div>
+      <div role="button" class="play" :class="{ active: syncStore.playing }" @click="togglePlay">P</div>
+      <div role="button" class="mute" :class="{ active: syncStore.mute }" @click="toggleMute">M</div>
     </div>
     <div
       class="progress-bar"
@@ -92,7 +103,7 @@ function setProgress(time) {
   padding: var(--spacing-l);
   gap: var(--spacing-l);
   width: 100vw;
-  height: 60px;
+  height: 62px;
   // background: black;
   bottom: 0px;
 
@@ -110,20 +121,25 @@ function setProgress(time) {
   .button-group {
     gap: var(--spacing);
     > div {
-      &.active {
-        color: rgb(var(--teal-5));
-      }
       &:hover {
-        color: rgb(var(--teal-1));
+        background: rgb(var(--blue-gray-3));
       }
-      transition: color 0.5s;
+      &.active {
+        background: rgb(var(--teal-5));
+        &:hover {
+          background: rgb(var(--teal-3));
+          // background: rgb(var(--blue-gray-1));
+        }
+      }
+      background: rgb(var(--blue-gray-6));
+      transition: color 0.2s, background 0.2s;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 20px;
-      height: 20px;
-      border: 1.5px solid currentColor;
+      width: 24px;
+      height: 24px;
+      // border: 1.5px solid currentColor;
       border-radius: 50%;
     }
   }

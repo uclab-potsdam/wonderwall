@@ -5,8 +5,9 @@ export const useSyncStore = defineStore("sync", () => {
   const channel = new BroadcastChannel("sync");
   const time = ref(47.4);
   const timeOverwrite = ref(null);
-  const playing = ref(true);
+  const playing = ref(false);
   const duration = ref(100);
+  const mute = ref(true);
   // const doubleCount = computed(() => count.value * 2);
   function updateTime(t) {
     time.value = t;
@@ -22,6 +23,13 @@ export const useSyncStore = defineStore("sync", () => {
       value: time.value,
     });
   }
+  function setDuration(t) {
+    duration.value = t;
+    channel.postMessage({
+      action: "set_duration",
+      value: duration.value,
+    });
+  }
   function setPlaying(p) {
     playing.value = p;
     channel.postMessage({
@@ -29,11 +37,31 @@ export const useSyncStore = defineStore("sync", () => {
       value: playing.value,
     });
   }
-  function setDuration(t) {
-    duration.value = t;
+  function togglePlay() {
+    playing.value = !playing.value;
     channel.postMessage({
-      action: "set_duration",
-      value: duration.value,
+      action: "set_playing",
+      value: playing.value,
+    });
+  }
+  function setMute(m) {
+    mute.value = m;
+    channel.postMessage({
+      action: "set_mute",
+      value: mute.value,
+    });
+  }
+  function toggleMute() {
+    mute.value = !mute.value;
+    channel.postMessage({
+      action: "set_mute",
+      value: mute.value,
+    });
+  }
+
+  function requestDuration() {
+    channel.postMessage({
+      action: "request_duration",
     });
   }
 
@@ -50,13 +78,38 @@ export const useSyncStore = defineStore("sync", () => {
       case "set_playing":
         playing.value = data.value;
         break;
+      case "set_mute":
+        mute.value = data.value;
+        break;
       case "set_duration":
         duration.value = data.value;
+        break;
+      case "request_duration":
+        channel.postMessage({
+          action: "set_duration",
+          value: duration.value,
+        });
         break;
     }
   });
 
-  return { channel, time, playing, duration, progress, timeOverwrite, updateTime, setTime, setPlaying, setDuration };
+  return {
+    channel,
+    time,
+    playing,
+    mute,
+    duration,
+    progress,
+    timeOverwrite,
+    updateTime,
+    setTime,
+    setPlaying,
+    setMute,
+    setDuration,
+    togglePlay,
+    toggleMute,
+    requestDuration,
+  };
 });
 
 if (import.meta.hot) {
