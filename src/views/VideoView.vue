@@ -1,9 +1,11 @@
 <script setup>
 import TheVideo from "@/components/TheVideo.vue";
+import TheControls from "@/components/TheControls.vue";
 </script>
 <template>
   <div class="video">
     <TheVideo />
+    <TheControls />
   </div>
 </template>
 

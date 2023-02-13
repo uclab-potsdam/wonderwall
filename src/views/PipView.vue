@@ -1,6 +1,7 @@
 <script setup>
 import TheVis from "@/components/TheVis.vue";
 import TheVideo from "@/components/TheVideo.vue";
+import TheControls from "@/components/TheControls.vue";
 </script>
 <template>
   <div class="vis">
@@ -8,6 +9,7 @@ import TheVideo from "@/components/TheVideo.vue";
       <TheVideo />
     </div>
     <TheVis />
+    <TheControls />
   </div>
 </template>
 

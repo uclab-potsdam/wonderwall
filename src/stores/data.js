@@ -37,7 +37,8 @@ export const useDataStore = defineStore("data", () => {
   // decouple *syncStore.time* and *active*
   // to prevent pemanent recomputing of computed values referring to *active*
   watchEffect(() => {
-    const index = ranges.value.findLastIndex((range) => syncStore.time >= range.in);
+    // todo: check why + 0.001 is needed when jumping using timestamps in thecontrols
+    const index = ranges.value.findLastIndex((range) => syncStore.time + 0.001 >= range.in);
     const id = ranges.value[index]?.id;
     if (id !== active.value) {
       active.value = id;
@@ -57,6 +58,10 @@ export const useDataStore = defineStore("data", () => {
   //   // console.log(oldSync.time, sync.time);
   //   if (oldTime < newTime) extendHistory();
   // });
+
+  const activeEntityTimestamps = computed(() => {
+    return ranges.value.filter((r) => r.id === activeEntity.value?.id).map((d) => d.in);
+  });
 
   const activeEntity = computed(() => entities.value.find((e) => e.id === (userActive.value || active.value)));
   const historyPath = computed(() =>
@@ -310,6 +315,7 @@ export const useDataStore = defineStore("data", () => {
     historyPath,
     history,
     registerMovement,
+    activeEntityTimestamps,
   };
 });
 

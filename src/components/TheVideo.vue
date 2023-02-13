@@ -1,6 +1,6 @@
 <script setup>
 import { useSyncStore } from "@/stores/sync";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 const video = ref(null);
 const range = [37, 543];
@@ -12,11 +12,23 @@ onMounted(() => {
 });
 
 function update() {
-  let currentTime = video.value.currentTime;
+  let currentTime = video.value?.currentTime;
   if (currentTime < range[0] || currentTime > range[1]) video.value.currentTime = currentTime = range[0];
-  syncStore.setTime(currentTime);
+  syncStore.updateTime(currentTime);
   requestAnimationFrame(update);
 }
+
+watch(
+  () => syncStore.timeOverwrite,
+  () => {
+    video.value.currentTime = syncStore.timeOverwrite;
+  }
+);
+
+function setDuration() {
+  syncStore.setDuration(video.value.duration);
+}
+
 // const videos = Array.from(document.querySelectorAll("video"));
 // const channel = new BroadcastChannel("sync");
 // let video = videos[0];
@@ -37,7 +49,7 @@ function update() {
 </script>
 
 <template>
-  <video id="tunnel" width="100%" loop x-autoplay muted ref="video" controls>
+  <video id="tunnel" width="100%" loop x-autoplay muted ref="video" controls @durationchange="setDuration">
     <source src="/baniwa.webm" type="video/webm" preload />
   </video>
 </template>

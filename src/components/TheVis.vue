@@ -243,7 +243,7 @@ const layout = computed(() => {
 const svg = ref(null);
 
 function enterFullscreen() {
-  svg.value.requestFullscreen();
+  document.querySelector("body").requestFullscreen();
 }
 </script>
 
