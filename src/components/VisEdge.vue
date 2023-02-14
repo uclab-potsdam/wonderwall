@@ -3,6 +3,9 @@ import { computed, watch, ref } from "vue";
 import { easeQuad } from "d3-ease";
 import BaseInterpolate from "@/components/BaseInterpolate.vue";
 
+import { useConfigStore } from "@/stores/config";
+const configStore = useConfigStore();
+
 const props = defineProps(["source", "target", "label", "degree", "stroke", "next", "origin"]);
 
 const path = computed(() => {
@@ -102,7 +105,14 @@ watch(
 <template>
   <g class="link" :class="[`degree-${props.degree}`]">
     <BaseInterpolate :props="{ path, stroke }" :delay="500" v-slot="value">
-      <path ref="svgPath" stroke-width="80" :d="value.path" class="broad" :stroke="value.stroke" />
+      <path
+        ref="svgPath"
+        stroke-width="80"
+        :d="value.path"
+        class="broad"
+        :class="{ 'no-blur': !configStore.highPerformance }"
+        :stroke="value.stroke"
+      />
       <template v-if="props.next != null">
         <path v-if="phase === 'MID'" stroke-width="72" :d="value.path" class="broad next" />
         <path v-else stroke-width="72" :d="wormPath" class="broad next" />
@@ -179,6 +189,10 @@ watch(
       // stroke: rgb(var(--blue-gray-2));
       &.broad {
         filter: blur(20px);
+        &.no-blur {
+          filter: none;
+          opacity: 0.1;
+        }
         // transition: stroke 0.75s ease-in-out, opacity 0.75s ease-in-out;
         // stroke: rgb(var(--blue-gray-11));
         // &.no-history {

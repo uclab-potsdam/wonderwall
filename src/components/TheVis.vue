@@ -334,60 +334,6 @@ svg {
     isolation: isolate;
   }
 
-  .links {
-    .link {
-      .label {
-        text-anchor: middle;
-        font-size: var(--font-size);
-        fill: rgb(var(--blue-gray-2));
-        text-transform: uppercase;
-      }
-
-      path {
-        stroke: rgb(var(--blue-gray-8));
-      }
-    }
-  }
-
-  .nodes {
-    .node {
-      foreignObject {
-        overflow: visible;
-      }
-      .label {
-        position: fixed;
-        // color: rgba(var(--gray-4));
-        transform: translate(-50%, -50%);
-        font-size: var(--font-size-l);
-        // text-align: center;
-
-        // opacity: 0;
-        transition: opacity 0.5s;
-        filter: blur(0.5px);
-        mark {
-          transition: font-weight 0.5s, color 0.5s;
-          background-color: rgba(var(--blue-gray-10), 0.5);
-          // outline: var(--spacing-xs) solid rgb(var(--blue-gray-10));
-          // box-shadow: 5px 0 red;
-          color: rgb(var(--blue-gray-8));
-        }
-
-        &.active {
-          opacity: 1;
-          filter: blur(0px);
-
-          mark {
-            font-weight: 600;
-            color: rgb(var(--gray-0));
-            font-size: var(--font-size-l);
-            // background-color: rgb(var(--yellow-7));
-            // outline: var(--spacing-xs) solid rgb(var(--yellow-7));
-          }
-        }
-      }
-    }
-  }
-
   .default-enter-active {
     transition: all 0.5s 1.5s ease;
   }
@@ -397,7 +343,6 @@ svg {
   .default-enter-from,
   .default-leave-to {
     opacity: 0;
-    // filter: blur(15px);
   }
 }
 </style>

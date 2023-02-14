@@ -78,11 +78,12 @@ const props = defineProps(["entity", "position", "degree"]);
   foreignObject {
     overflow: visible;
     pointer-events: none;
+    // position: relative;
     // transition: transform 0.2s;
     // transform-origin: left center;
   }
   .entity {
-    position: absolute;
+    position: fixed;
     cursor: pointer;
     display: flex;
     flex-direction: column;

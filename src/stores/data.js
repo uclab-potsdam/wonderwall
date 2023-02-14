@@ -136,24 +136,68 @@ export const useDataStore = defineStore("data", () => {
     // }
 
     const hideBranches = ["canvas-pottery-copy"];
+    // const branchesProxy = {
+    //   "main": {
+    //     "@id": "Branch/main",
+    //     "@type": "Branch",
+    //     "name": "main",
+    //     "head": "InitialCommit/jag6ibll1zds9unz7zhty4fuo5djsb0"
+    //   },
+    //   "template-production": {
+    //     "@id": "Branch/template-production",
+    //     "@type": "Branch",
+    //     "name": "template-production",
+    //     "head": "ValidCommit/lq5xp3mxjsji1mfb6rg9xdaalxoqchs"
+    //   },
+    //   "dictionary-main": {
+    //     "@id": "Branch/dictionary-main",
+    //     "@type": "Branch",
+    //     "name": "dictionary-main",
+    //     "head": "ValidCommit/wfewf6vuaj9l8omdzvbviikrs99ae6d"
+    //   },
+    //   "canvas-pottery": {
+    //     "@id": "Branch/canvas-pottery",
+    //     "@type": "Branch",
+    //     "name": "canvas-pottery",
+    //     "head": "ValidCommit/e7yjstxc1p8o91exg8jw4f7kbk7jsfs"
+    //   },
+    //   "Shortcut": {
+    //     "@id": "Branch/Shortcut",
+    //     "@type": "Branch",
+    //     "name": "Shortcut",
+    //     "head": "ValidCommit/ktp3kfom7b972g8scmv8ig4941qzh5s"
+    //   },
+    //   "canvas-pottery-copy": {
+    //     "@id": "Branch/canvas-pottery-copy",
+    //     "@type": "Branch",
+    //     "name": "canvas-pottery-copy",
+    //     "head": "ValidCommit/cb6mycatap7a6amjlga7654vr1ylzh6"
+    //   },
+    //   "test": {
+    //     "@id": "Branch/test",
+    //     "@type": "Branch",
+    //     "name": "test",
+    //     "head": "ValidCommit/v0j73wybp0i0xj3grd5pkqftbtbou3q"
+    //   }
+    // }
     branches.value = Object.entries(await client.value.getBranches())
       .map((d) => d[1])
       .filter((b) => !hideBranches.includes(b.name));
-    const schema = await client.value.query(
-      WOQL.or(
-        ...branches.value.map(
-          (branch) =>
-            WOQL.using(`branch/${branch.name}`)
-              .select("v:ref", "v:name", "v:description", "v:type")
-              .member("v:ref", [`branch/${branch.name}`])
-              .triple("v:id", "rdf:type", "@schema:Graph")
-          // .quad("terminusdb://context", "sys:metadata", "v:json", "schema")
-          // .quad("v:json", "json:_name", "v:name", "schema")
-          // .quad("v:json", "json:_description", "v:description", "schema")
-          // .quad("v:json", "json:_type", "v:type", "schema")
-        )
-      )
-    );
+    // const schema = await client.value.query(
+    //   WOQL.or(
+    //     ...branches.value.map(
+    //       (branch) =>
+    //         WOQL.using(`branch/${branch.name}`)
+    //           .select("v:ref", "v:name", "v:description", "v:type")
+    //           .member("v:ref", [`branch/${branch.name}`])
+    //           .triple("v:id", "rdf:type", "@schema:Graph")
+    //       // .quad("terminusdb://context", "sys:metadata", "v:json", "schema")
+    //       // .quad("v:json", "json:_name", "v:name", "schema")
+    //       // .quad("v:json", "json:_description", "v:description", "schema")
+    //       // .quad("v:json", "json:_type", "v:type", "schema")
+    //     )
+    //   )
+    // );
 
     ranges.value = await fetch("/ranges.json")
       .then((d) => d.json())
