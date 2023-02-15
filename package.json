@@ -10,7 +10,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@terminusdb/terminusdb-client": "^10.0.25",
+    "@terminusdb/terminusdb-client": "github:fidelthomet/terminusdb-client-js",
     "d3-ease": "^3.0.1",
     "d3-interpolate": "^3.0.1",
     "lodash.groupby": "^4.6.0",
