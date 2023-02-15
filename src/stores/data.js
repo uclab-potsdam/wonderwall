@@ -73,7 +73,15 @@ export const useDataStore = defineStore("data", () => {
       ),
     ]
       .map((id) =>
-        ranges.value.filter((r) => r.id === id).map((d) => ({ in: d.in, active: d.id === activeEntity.value?.id }))
+        ranges.value
+          .map((r, index) => ({ ...r, index }))
+          .filter((r) => r.id === id)
+          .map((d) => ({
+            in: d.in,
+            out: ranges.value[d.index + 1]?.in || d.in + 60, // todo: handle last timestamp
+            active: d.id === activeEntity.value?.id,
+            label: entities.value.find((entity) => entity.id === d.id)?.label?.en,
+          }))
       )
       .flat()
       .sort((r) => (r.active ? 1 : -1));
@@ -334,13 +342,13 @@ export const useDataStore = defineStore("data", () => {
     }
   }
 
-  let userInterectedTimeout = null;
+  let userInteractedTimeout = null;
   function select(id) {
-    clearTimeout(userInterectedTimeout);
+    clearTimeout(userInteractedTimeout);
     userActive.value = id;
     extendHistory();
     requestEntitiesAndRelations([userActive.value], degrees.value);
-    userInterectedTimeout = setTimeout(() => {
+    userInteractedTimeout = setTimeout(() => {
       userActive.value = null;
       extendHistory();
     }, 5000);
@@ -352,8 +360,8 @@ export const useDataStore = defineStore("data", () => {
   }
 
   function registerMovement() {
-    clearTimeout(userInterectedTimeout);
-    userInterectedTimeout = setTimeout(() => {
+    clearTimeout(userInteractedTimeout);
+    userInteractedTimeout = setTimeout(() => {
       userActive.value = null;
       extendHistory();
     }, 5000);
