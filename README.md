@@ -1,7 +1,3 @@
-# NOTE
-
-this repsository currently contains username and a read-only access token in the .env file. so, make not public before considering implications!
-
 # wonderwall
 
 This template should help get you started developing with Vue 3 in Vite.
