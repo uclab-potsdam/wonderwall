@@ -1,5 +1,6 @@
 <script setup>
 import { useSyncStore } from "@/stores/sync";
+import { useConfigStore } from "@/stores/config";
 import { ref, onMounted, watch } from "vue";
 
 const video = ref(null);
@@ -7,6 +8,7 @@ const range = [37, 543];
 const pip = ref(false);
 
 const syncStore = useSyncStore();
+const configStore = useConfigStore();
 
 onMounted(() => {
   requestAnimationFrame(update);
@@ -83,7 +85,7 @@ function setDuration() {
     @pause="syncStore.setPlaying(false)"
     @volumechange="onVolumeChange"
   >
-    <source src="/baniwa.webm" type="video/webm" preload />
+    <source :src="configStore.videoUrl" type="video/webm" preload />
   </video>
 </template>
 

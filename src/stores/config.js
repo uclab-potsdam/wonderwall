@@ -3,6 +3,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 
 export const useConfigStore = defineStore("config", () => {
   const highPerformance = ref(JSON.parse(localStorage.getItem("HIGH_PERFORMANCE")) !== false);
+  const videoUrl = ref(import.meta.env.VITE_VIDEO_URL);
 
   watch(highPerformance, () => {
     localStorage.setItem("HIGH_PERFORMANCE", JSON.stringify(highPerformance.value));
@@ -10,6 +11,7 @@ export const useConfigStore = defineStore("config", () => {
 
   return {
     highPerformance,
+    videoUrl,
   };
 });
 
