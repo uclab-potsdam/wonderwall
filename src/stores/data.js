@@ -132,7 +132,7 @@ export const useDataStore = defineStore("data", () => {
     const server = import.meta.env.VITE_SERVER;
     client.value = new WOQLClient(server, {
       user: import.meta.env.VITE_USER,
-      token: import.meta.env.VITE_TOKEN,
+      [import.meta.env.VITE_AUTH_MODE]: import.meta.env.VITE_TOKEN,
       organization: import.meta.env.VITE_ORGANIZATION,
     });
     client.value.db(import.meta.env.VITE_DB);
